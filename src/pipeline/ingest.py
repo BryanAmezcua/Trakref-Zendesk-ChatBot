@@ -13,6 +13,8 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_mongodb import MongoDBAtlasVectorSearch
 from pymongo import MongoClient
 from src.api.zendesk_client import ZendeskClient
+from src.pipeline.models import Category, Section, Article
+from src.text.clean import html_to_text
 
 # Load environment variables
 load_dotenv()
@@ -46,10 +48,48 @@ def ingest():
     
     # Instantiate Zendesk Client to fetch data
     client = ZendeskClient(base=TRAKREF_ZENDESK_BASE)
+
+    categories_by_id = {}
+    sections_by_id = {}
+    articles_by_id = {}
     
-    # Step 1: Get documents
-    for category in client.iterate_categories():
-        print(f"category: {category}")
+    # Step 1: Get categories, sections, and articles
+    for cat in client.iterate_categories():
+        category = Category(
+            id=cat["id"],
+            name=cat["name"]
+        )
+        categories_by_id[category.id] = category
+
+    for sec in client.iterate_sections():
+        section = Section(
+            id=sec["id"],
+            name=sec["name"],
+            category_id=sec["category_id"],
+            category_name=categories_by_id[sec["category_id"]].name
+        )
+        sections_by_id[section.id] = section
+
+    for art in client.iterate_articles():
+        article = Article(
+            id = art["id"],
+            text = html_to_text(art["body"]),
+            article_name=art["name"],
+            category_id=sections_by_id[art["section_id"]].category_id,
+            category_name=sections_by_id[art["section_id"]].category_name,
+            section_id=art["section_id"],
+            section_name=sections_by_id[art["section_id"]].name,
+            url=art["url"],
+            title=art["title"],
+            updated_at=art["updated_at"],
+        )
+        print(f"article: {article}")
+        articles_by_id[article.id] = article
+
+        #print(f"articles_by_id: {articles_by_id}")
+
+
+
     
     """ if not articles:
         raise ValueError("No articles found in Zendesk")

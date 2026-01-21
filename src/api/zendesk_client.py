@@ -17,15 +17,14 @@ class ZendeskClient:
     # fetch categories
     def iterate_categories(self):
         url = f"{self.base}/help_center/categories.json?page[size]=100"
-        print(f"url: {url}")
         yield from self.iterate_pagination(url, "categories")
 
     # fetch sections
-    def iterate_sections(self, category_id):
-        url = f"{self.base}/help_center/categories/{category_id}/sections.json?page[size]=100"
-        yield from self._iter_paginated(url, "sections")
+    def iterate_sections(self):
+        url = f"{self.base}/help_center/sections.json?page[size]=100"
+        yield from self.iterate_pagination(url, "sections")
 
     # fetch articles
-    def iterate_articles(self, section_id):
-        url = f"{self.base}/help_center/sections/{section_id}/articles.json?page[size]=100"
-        yield from self._iter_paginated(url, "articles")
+    def iterate_articles(self):
+        url = f"{self.base}/help_center/articles.json?page[size]=100"
+        yield from self.iterate_pagination(url, "articles")
