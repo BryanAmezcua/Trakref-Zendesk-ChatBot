@@ -15,6 +15,8 @@ from pymongo import MongoClient
 from src.api.zendesk_client import ZendeskClient
 from src.pipeline.models import Category, Section, Article
 from src.text.clean import html_to_text
+from src.text.chunk import chunk_articles
+from src.vectorstore.mongoDB import setup_mongodb_collection
 
 # Load environment variables
 load_dotenv()
@@ -51,7 +53,7 @@ def ingest():
 
     categories_by_id = {}
     sections_by_id = {}
-    articles_by_id = {}
+    articles = []
     
     # Step 1: Get categories, sections, and articles
     for cat in client.iterate_categories():
@@ -83,24 +85,26 @@ def ingest():
             title=art["title"],
             updated_at=art["updated_at"],
         )
-        print(f"article: {article}")
-        articles_by_id[article.id] = article
+        # print(f"article: {article}")
+        articles.append(article)
 
-        #print(f"articles_by_id: {articles_by_id}")
-
-
-
+        # print(f"articles: {articles}")
     
-    """ if not articles:
-        raise ValueError("No articles found in Zendesk")
-     """
-    """ # Step 2: Load and chunk PDFs
-    documents = load_and_chunk_pdfs(pdf_files)
+    # Step 2: Load and chunk articles
+    documents = chunk_articles(
+        articles,
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=CHUNK_OVERLAP
+    )
     
     # Step 3: Setup MongoDB
-    client, collection = setup_mongodb_collection()
+    client, collection = setup_mongodb_collection(
+        mongo_db_url=MONGO_DB_URL,
+        db_name=DB_NAME,
+        collection_name=COLLECTION_NAME
+    )
     
-    try:
+    """ try:
         # Step 4: Create embeddings and store in vector database
         vector_store = create_vector_store(collection, documents)
         
