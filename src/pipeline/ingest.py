@@ -7,16 +7,11 @@ import os
 import certifi
 from dotenv import load_dotenv
 
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings
-from langchain_mongodb import MongoDBAtlasVectorSearch
-from pymongo import MongoClient
 from src.api.zendesk_client import ZendeskClient
 from src.pipeline.models import Category, Section, Article
 from src.text.clean import html_to_text
 from src.text.chunk import chunk_articles
-from src.vectorstore.mongoDB import setup_mongodb_collection
+from src.vectorstore.mongoDB import setup_mongodb_collection, create_vector_store, print_vector_search_index_instructions
 
 # Load environment variables
 load_dotenv()
@@ -104,9 +99,14 @@ def ingest():
         collection_name=COLLECTION_NAME
     )
     
-    """ try:
+    try:
         # Step 4: Create embeddings and store in vector database
-        vector_store = create_vector_store(collection, documents)
+        vector_store = create_vector_store(
+            collection=collection,
+            documents=documents,
+            openai_api_key=OPENAI_API_KEY,
+            index_name=INDEX_NAME
+        )
         
         print("\n✅ Ingestion complete!")
         print(f"   Database: {DB_NAME}")
@@ -117,7 +117,7 @@ def ingest():
         print_vector_search_index_instructions()
         
     finally:
-        client.close() """
+        client.close()
 
 
 if __name__ == "__main__":
