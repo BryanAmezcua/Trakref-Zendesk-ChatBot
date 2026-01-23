@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
 from langchain_mongodb import MongoDBAtlasVectorSearch
 from pymongo import MongoClient
-from src.retrieval.common import format_retrieved_context, get_vector_store
+from src.retrieval.common import format_context, get_vector_store
 
 # Load environment variables
 load_dotenv()
@@ -137,7 +137,7 @@ def main():
     
     # Show formatted context
     documents = [doc for doc, _ in results] # this is similar to JS array destructuring - use _ to skip an item at certain index
-    context = format_retrieved_context(documents)
+    context = format_context(documents)
     print("\n" + "=" * 50)
     print("Formatted Context for LLM:")
     print("=" * 50)

@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-from src.retrieval.common import retrieve_documents, format_retrieved_context
+from src.retrieval.common import retrieve_documents, format_context
 
 # Load environment variables
 load_dotenv()
@@ -74,7 +74,7 @@ def generate_answer(question: str, top_k: int = TOP_K, verbose: bool = False) ->
         }
     
     # Step 2: Format context
-    context = format_retrieved_context(documents)
+    context = format_context(documents)
     
     # Step 3: Generate answer
     chain = create_rag_chain()

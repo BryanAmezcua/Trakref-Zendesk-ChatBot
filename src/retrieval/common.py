@@ -62,7 +62,7 @@ def retrieve_documents(query: str, top_k: int = DEFAULT_TOP_K) -> list:
     finally:
         client.close()
 
-def format_retrieved_context(documents: list) -> str:
+def format_context(documents: list) -> str:
     """
     Format retrieved documents into a context string for the LLM.
     
