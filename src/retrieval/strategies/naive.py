@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
 from langchain_mongodb import MongoDBAtlasVectorSearch
 from pymongo import MongoClient
+from src.retrieval.common import format_retrieved_context, get_vector_store
 
 # Load environment variables
 load_dotenv()
@@ -25,49 +26,6 @@ INDEX_NAME = "naive"
 
 # Retrieval configuration
 DEFAULT_TOP_K = 5
-
-def get_vector_store():
-    """Connect to the MongoDB vector store."""
-    client = MongoClient(MONGO_DB_URL, tlsCAFile=certifi.where())
-    collection = client[DB_NAME][COLLECTION_NAME]
-    
-    embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",
-        openai_api_key=OPENAI_API_KEY
-    )
-    
-    vector_store = MongoDBAtlasVectorSearch(
-        collection=collection,
-        embedding=embeddings,
-        index_name=INDEX_NAME
-    )
-    
-    return vector_store, client
-
-def format_retrieved_context(documents: list) -> str:
-    """
-    Format retrieved documents into a context string for the LLM.
-    
-    Args:
-        documents: List of retrieved document objects
-    
-    Returns:
-        Formatted context string
-    """
-    context_parts = []
-    
-    for i, doc in enumerate(documents, 1):
-        category_name = doc.metadata.get('category_name', 'Unknown')
-        section_name = doc.metadata.get('section_name', 'Unknown')
-        article_name= doc.metadata.get('article_name', 'Unknown')
-
-        context_parts.append(
-            f"[Document {i}]\n"
-            f"Category: {category_name} (Section: {section_name}, Article: {article_name})\n"
-            f"Content:\n{doc.page_content}\n"
-        )
-    
-    return "\n---\n".join(context_parts)
 
 def debug_collection():
     """Debug function to check MongoDB collection status."""
@@ -174,11 +132,11 @@ def main():
         print(f"Category Name: {doc.metadata.get('category_name', 'Unknown')}")
         print(f"Section Name: {doc.metadata.get('section_name', 'Unknown')}")
         print(f"Article Name: {doc.metadata.get('article_name', 'Unknown')}")
-        print(f"Text: {doc.metadata.get('text', 'Unknown')}")
+        #print(f"Full Page Content : {doc.page_content}")
         print(f"Content preview: {doc.page_content[:300]}...")
     
     # Show formatted context
-    documents = [doc for doc, _ in results]
+    documents = [doc for doc, _ in results] # this is similar to JS array destructuring - use _ to skip an item at certain index
     context = format_retrieved_context(documents)
     print("\n" + "=" * 50)
     print("Formatted Context for LLM:")

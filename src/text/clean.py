@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+# Since Zendesk API returns HTML, we must sanitize to text only
 def html_to_text(html: str) -> str:
     if not html: # None or ""
         return ""
