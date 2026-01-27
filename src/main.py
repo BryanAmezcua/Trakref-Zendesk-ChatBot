@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-from src.pipeline.generation import interactive_mode, generate_answer
+from src.pipeline.naive.generation import interactive_mode, generate_answer
 
 # Load environment variables
 load_dotenv()
