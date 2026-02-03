@@ -78,9 +78,12 @@ Trakref-Zendesk-ChatBot/
 │   ├── vectorstore/
 │   │   └── mongoDB.py                 # Vector store setup & management
 │   ├── evals/
-│   │   └── naive/
-│   │       ├── precision.py           # Retrieval precision metrics
-│   │       └── groundedness.py        # Answer faithfulness evaluation
+│   │   ├── naive/
+│   │   │   ├── precision.py           # Retrieval precision metrics
+│   │   │   └── groundedness.py        # Answer faithfulness evaluation
+│   │   └── metadata/
+│   │       ├── comparison.py          # Naive vs Filtered comparison
+│   │       └── precision.py           # Category & relevance precision
 │   └── main.py                        # CLI entry point
 ├── README.md
 ├── requirements.txt
@@ -165,8 +168,19 @@ Section: {section_name}
 
 ### 8. Evaluation Framework
 
-- **Precision** (`precision.py`): Measures relevance of retrieved documents
-- **Groundedness** (`groundedness.py`): LLM-as-judge verification that answers are supported by context
+**Naive RAG Evals** (`src/evals/naive/`):
+- **precision.py**: Measures relevance of retrieved documents
+- **groundedness.py**: LLM-as-judge verification that answers are supported by context
+
+**Metadata-Filtered RAG Evals** (`src/evals/metadata/`):
+- **comparison.py**: Side-by-side comparison of naive vs filtered RAG
+  - Category precision (% docs from expected category)
+  - Groundedness comparison
+  - Win/loss tracking per test case
+- **precision.py**: Focused retrieval precision metrics
+  - Category precision
+  - LLM-judged relevance precision
+  - Per-document relevance scoring
 
 ## Configuration
 
@@ -329,11 +343,25 @@ python -m src.main
 3. Update chunking logic in `src/text/chunk.py` if needed
 4. Create ingestion pipeline
 
+### Running Evaluations
+
+```bash
+# Compare naive vs metadata-filtered RAG (full evaluation)
+python -m src.evals.metadata.comparison -k 5 --output results.json
+
+# Precision-only evaluation (faster)
+python -m src.evals.metadata.precision -k 5 --no-relevance
+
+# Naive RAG groundedness evaluation
+python -m src.evals.naive.groundedness -k 5
+```
+
 ### Evaluation Best Practices
 
 - Use predefined test cases for consistency
 - Run both precision and groundedness evals
 - Compare metrics across retrieval strategies
+- Use `--output` to save results for tracking over time
 
 ## Current Branch
 
