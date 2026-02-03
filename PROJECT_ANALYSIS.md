@@ -61,13 +61,17 @@ Trakref-Zendesk-ChatBot/
 │   │   ├── naive/
 │   │   │   ├── ingest.py              # Basic ingestion pipeline
 │   │   │   └── generation.py          # Query → retrieve → generate
-│   │   └── metadata/
-│   │       └── ingest.py              # Metadata-filtered ingestion
+│   │   ├── metadata/
+│   │   │   ├── ingest.py              # Metadata-filtered ingestion (placeholder)
+│   │   │   └── generation.py          # Generation with metadata filters
+│   │   └── hybrid/
+│   │       └── generation.py          # Hybrid search generation (vector + BM25)
 │   ├── retrieval/
 │   │   ├── common.py                  # Core retrieval & pre-filtering
 │   │   └── strategies/
 │   │       ├── naive.py               # Simple vector similarity
-│   │       └── metadata-filtered.py   # Enhanced filtering strategies
+│   │       ├── metadata-filtered.py   # Enhanced filtering strategies
+│   │       └── hybrid.py              # Hybrid retrieval (vector + BM25 + RRF)
 │   ├── text/
 │   │   ├── chunk.py                   # Document chunking with metadata
 │   │   └── clean.py                   # HTML → text conversion
@@ -89,7 +93,7 @@ Trakref-Zendesk-ChatBot/
 |-------|--------|-------------|
 | **01-naive-rag** | ✅ Complete | Basic vector similarity search |
 | **02-metadata-filtered** | ✅ Complete | Pre-filtered retrieval using Zendesk taxonomy |
-| **03-hybrid-search** | 📋 Planned | BM25 + vector with RRF ranking |
+| **03-hybrid-search** | ✅ Complete | BM25 + vector with RRF ranking |
 | **04-graph-rag** | 📋 Planned | Neo4j knowledge graphs |
 | **05-agentic-rag** | 📋 Planned | ReAct pattern with tool selection |
 
@@ -147,6 +151,12 @@ Section: {section_name}
 - `section_id` - Filter by section
 - `updated_at` - Filter by article recency
 
+**Hybrid RAG**: Combines vector search with BM25 full-text search using Reciprocal Rank Fusion (RRF):
+- Vector search captures semantic similarity
+- BM25 captures exact keyword matches (acronyms, rare terms, exact phrases)
+- RRF merges results with configurable weights
+- Excels at queries mixing concepts with specific terminology
+
 ### 7. Generation Pipeline
 
 - Temperature: 0.0 (deterministic)
@@ -172,18 +182,48 @@ TRAKREF_ZENDESK_BASE=subdomain
 
 Requires manual index creation in MongoDB Atlas:
 
+**Vector Search Index** (required for all modes):
 ```json
 {
-  "fields": [
-    {
-      "type": "vector",
-      "path": "embedding",
-      "numDimensions": 1536,
-      "similarity": "cosine"
-    }
-  ]
+  "name": "naive",
+  "definition": {
+    "fields": [
+      {
+        "type": "vector",
+        "path": "embedding",
+        "numDimensions": 1536,
+        "similarity": "cosine"
+      }
+    ]
+  }
 }
 ```
+
+**Full-Text Search Index** (required for hybrid search):
+```json
+{
+  "name": "fulltext",
+  "definition": {
+    "analyzer": "lucene.standard",
+    "searchAnalyzer": "lucene.standard",
+    "mappings": {
+      "dynamic": false,
+      "fields": {
+        "text": {
+          "type": "string",
+          "analyzer": "lucene.standard"
+        }
+      }
+    }
+  }
+}
+```
+
+To create indexes:
+1. Go to MongoDB Atlas → Your Cluster → Atlas Search tab
+2. Click "Create Search Index" → Select "JSON Editor"
+3. Paste the configuration and set the name
+4. Wait for index status to become "Active"
 
 ## Usage
 
@@ -235,11 +275,42 @@ print(result["sources"])
 print(result["filters_applied"])  # Shows which filters were used
 ```
 
+### Hybrid RAG
+
+```python
+from src.pipeline.hybrid.generation import generate_answer, interactive_mode
+
+# Basic hybrid search
+result = generate_answer("What is a work order?")
+
+# Adjust weights: favor keywords over semantics
+result = generate_answer(
+    "TR4 installation guide",
+    vector_weight=0.5,
+    fulltext_weight=1.5
+)
+
+# Combine with metadata filtering
+result = generate_answer(
+    "What's new in the latest release?",
+    category_name="Release Notes",
+    vector_weight=1.0,
+    fulltext_weight=1.0
+)
+
+# Response includes search configuration
+print(result["answer"])
+print(result["search_config"])  # Shows method, weights, filters
+```
+
 ### CLI Entry Point
 
 ```bash
 python -m src.main
-# Select mode 1 (Naive) or 2 (Metadata-Filtered)
+# Select mode:
+#   1 - Naive RAG (vector only)
+#   2 - Metadata-Filtered RAG (vector + pre-filtering)
+#   3 - Hybrid RAG (vector + BM25 keyword search)
 ```
 
 ## Building on This Project

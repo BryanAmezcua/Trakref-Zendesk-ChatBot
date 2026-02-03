@@ -6,6 +6,8 @@ from src.pipeline.naive.generation import generate_answer as naive_generate
 from src.pipeline.metadata.generation import interactive_mode as filtered_interactive
 from src.pipeline.metadata.generation import generate_answer as filtered_generate
 from src.pipeline.metadata.generation import list_categories
+from src.pipeline.hybrid.generation import interactive_mode as hybrid_interactive
+from src.pipeline.hybrid.generation import generate_answer as hybrid_generate
 
 # Load environment variables
 load_dotenv()
@@ -26,13 +28,16 @@ def main():
 
     # Mode selection
     print("\nSelect mode:")
-    print("  1. Naive RAG (no filtering)")
-    print("  2. Metadata-Filtered RAG")
+    print("  1. Naive RAG (vector search only)")
+    print("  2. Metadata-Filtered RAG (vector + pre-filtering)")
+    print("  3. Hybrid RAG (vector + BM25 keyword search)")
     print("-" * 50)
-    mode = input("Enter mode (1 or 2): ").strip()
+    mode = input("Enter mode (1, 2, or 3): ").strip()
 
     if mode == "2":
         run_filtered_mode()
+    elif mode == "3":
+        run_hybrid_mode()
     else:
         run_naive_mode()
 
@@ -120,6 +125,57 @@ def run_filtered_mode():
         for source in result["sources"]:
             print(f"  - {source['Category']} > {source['Section']} > {source['Article']}")
             print(f"    URL: {source['URL']}")
+    else:
+        print("\nNo question provided. Run again to try!")
+
+
+def run_hybrid_mode():
+    """Run the hybrid RAG pipeline (vector + BM25)."""
+    print("\n" + "=" * 50)
+    print("Hybrid RAG Mode (Vector + BM25 with RRF)")
+    print("=" * 50)
+
+    print("\nThis mode combines:")
+    print("  - Vector search (semantic similarity)")
+    print("  - BM25 full-text search (keyword matching)")
+    print("  - Reciprocal Rank Fusion to merge results")
+
+    print("\nAvailable categories for filtering:")
+    for name in list_categories():
+        print(f"  - {name}")
+
+    print("\n" + "-" * 50)
+    print("Options:")
+    print("  i          - Interactive mode (adjust weights, set filters)")
+    print("  <question> - Ask a question")
+    print("-" * 50)
+
+    choice = input("Enter 'i' for interactive, or your question: ").strip()
+
+    if choice.lower() == 'i':
+        hybrid_interactive()
+    elif choice:
+        print(f"\nQuestion: {choice}")
+
+        try:
+            result = hybrid_generate(choice, verbose=False)
+
+            print("\n" + "-" * 50)
+            print("Answer:")
+            print("-" * 50)
+            print(result["answer"])
+
+            print(f"\nSearch config: {result.get('search_config', {})}")
+
+            print("\nSources:")
+            for source in result["sources"]:
+                print(f"  - {source['Category']} > {source['Section']} > {source['Article']}")
+                print(f"    URL: {source['URL']}")
+
+        except Exception as e:
+            print(f"\nError: {e}")
+            print("\nNote: Hybrid search requires a full-text index in MongoDB Atlas.")
+            print("Run: python -m src.retrieval.strategies.hybrid")
     else:
         print("\nNo question provided. Run again to try!")
 
