@@ -88,7 +88,7 @@ Trakref-Zendesk-ChatBot/
 | Stage | Status | Description |
 |-------|--------|-------------|
 | **01-naive-rag** | ✅ Complete | Basic vector similarity search |
-| **02-metadata-filtered** | 🔄 In Progress | Pre-filtered retrieval using Zendesk taxonomy |
+| **02-metadata-filtered** | ✅ Complete | Pre-filtered retrieval using Zendesk taxonomy |
 | **03-hybrid-search** | 📋 Planned | BM25 + vector with RRF ranking |
 | **04-graph-rag** | 📋 Planned | Neo4j knowledge graphs |
 | **05-agentic-rag** | 📋 Planned | ReAct pattern with tool selection |
@@ -190,18 +190,56 @@ Requires manual index creation in MongoDB Atlas:
 ### Interactive Mode
 
 ```python
+# Naive RAG (no filtering)
 from src.pipeline.naive.generation import interactive_mode
+interactive_mode()
+
+# Metadata-Filtered RAG (with category/section filtering)
+from src.pipeline.metadata.generation import interactive_mode
 interactive_mode()
 ```
 
 ### Programmatic Usage
 
 ```python
+# Naive RAG
 from src.pipeline.naive.generation import generate_answer
-
 result = generate_answer("What is a work order?")
 print(result["answer"])
 print(result["sources"])
+
+# Metadata-Filtered RAG
+from src.pipeline.metadata.generation import generate_answer
+
+# Filter by category name
+result = generate_answer(
+    "What new features were added?",
+    category_name="Release Notes"
+)
+
+# Filter by category ID directly
+result = generate_answer(
+    "What new features were added?",
+    category_id=23789686430605
+)
+
+# Filter by section ID
+result = generate_answer(
+    "How do I create a work order?",
+    section_id=12345
+)
+
+# Response includes filters applied
+print(result["answer"])
+print(result["sources"])
+print(result["filters_applied"])  # Shows which filters were used
+```
+
+### CLI Entry Point
+
+```bash
+python -m src.main
+# Select mode 1 (Naive) or 2 (Metadata-Filtered)
 ```
 
 ## Building on This Project
