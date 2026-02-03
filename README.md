@@ -1,306 +1,232 @@
-# RAG Cookbook 📚
+# Trakref Zendesk ChatBot
 
-A hands-on guide to Retrieval-Augmented Generation (RAG) patterns, progressing from simple to sophisticated implementations.
+A RAG (Retrieval-Augmented Generation) system for Trakref's Zendesk Help Center documentation. Ask natural language questions and receive accurate answers backed by official help articles.
 
-## What You'll Build
+## Overview
 
-Using **Warren Buffett's Berkshire Hathaway shareholder letters** (2004-2023) as your corpus, you'll implement 5 increasingly complex RAG patterns:
+This project implements multiple RAG patterns of increasing sophistication:
 
-| Step | Pattern | What You'll Learn |
-|------|---------|-------------------|
-| 01 | **Naive RAG** | Basic chunking, embedding, vector search |
-| 02 | **Metadata Filtering** | Pre-filtering by year, topic, company |
-| 03 | **Hybrid Search** | Combining BM25 + vector search with RRF |
-| 04 | **Graph RAG** | Knowledge graphs + vector search |
-| 05 | **Agentic RAG** | Dynamic retrieval decisions with agents |
+| Stage | Status | Description |
+|-------|--------|-------------|
+| **Naive RAG** | ✅ Complete | Basic vector similarity search |
+| **Metadata-Filtered RAG** | ✅ Complete | Pre-filtered retrieval using Zendesk taxonomy |
+| **Hybrid Search** | ✅ Complete | BM25 + vector with RRF ranking |
+| **Graph RAG** | 📋 Planned | Neo4j knowledge graphs |
+| **Agentic RAG** | 📋 Planned | ReAct pattern with tool selection |
 
 ## Tech Stack
 
-- **Vector Database**: MongoDB Atlas
-- **Embeddings/LLM**: OpenAI (text-embedding-3-small, gpt-4o-mini)
-- **Framework**: LangChain
-- **Graph Database**: Neo4j (Step 04 only)
+| Component | Technology |
+|-----------|------------|
+| LLM | OpenAI gpt-4o-mini |
+| Embeddings | text-embedding-3-small (1536 dimensions) |
+| Vector DB | MongoDB Atlas with vector search |
+| Framework | LangChain 0.3+ |
+| Text Processing | BeautifulSoup4, RecursiveCharacterTextSplitter |
+| Language | Python 3.9+ |
 
 ## Quick Start
 
 ### 1. Setup Environment
 
 ```bash
-# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # or `venv\Scripts\activate` on Windows
-
-# Install all dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Configure API Keys
+### 2. Configure Environment Variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file:
 
 ```env
-# Required for all steps
-OPENAI_API_KEY=your_openai_key
+OPENAI_API_KEY=your_key
 MONGO_DB_URL=mongodb+srv://user:pass@cluster.mongodb.net/
-
-# Optional (for LangSmith tracing)
-LANGCHAIN_API_KEY=your_langchain_key
-LANGCHAIN_TRACING_V2=true
-LANGCHAIN_PROJECT=rag-cookbook
-
-# For Step 04 (Graph RAG)
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=password123
+TRAKREF_ZENDESK_BASE=subdomain
 ```
 
-### 3. Start with Step 01
+### 3. Run the Application
 
 ```bash
-cd 01-naive-rag
-python ingestion.py   # Ingest PDFs into MongoDB
-python generation.py  # Ask questions!
+python -m src.main
+# Select mode:
+#   1 - Naive RAG (vector only)
+#   2 - Metadata-Filtered RAG (vector + pre-filtering)
+#   3 - Hybrid RAG (vector + BM25 keyword search)
 ```
 
----
-
-## Step-by-Step Guide
-
-### 📁 01-naive-rag — The Foundation
-
-**Concept**: The simplest RAG implementation. Chunk documents, embed them, store in a vector database, retrieve the top-k similar chunks, and generate an answer.
+## Architecture
 
 ```
-PDF → Chunk → Embed → Store → Query → Retrieve Top-K → Generate
+┌─────────────────────────────────────────────────────────────┐
+│  INGESTION PIPELINE                                         │
+│  Zendesk API → HTML Cleanup → Chunking → Embedding → Store  │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│  RETRIEVAL PIPELINE                                         │
+│  Query → Vector Search (+ Metadata Filter) → Top-K Docs     │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│  GENERATION PIPELINE                                        │
+│  Context Formatting → LLM Prompt → Answer + Sources         │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**What you'll learn**:
-- PDF loading and text chunking
-- Creating embeddings with OpenAI
-- Storing vectors in MongoDB Atlas
-- Basic similarity search
-- Prompt engineering for RAG
-
-**Files**:
-- `ingestion.py` - Load PDFs, chunk, embed, store
-- `retrieval.py` - Vector similarity search
-- `generation.py` - RAG pipeline with LLM
-- `evals/precision.py` - Measure retrieval precision
-- `evals/groundedness.py` - Measure answer groundedness
-
-**Run it**:
-```bash
-python 01-naive-rag/ingestion.py
-python 01-naive-rag/generation.py
-```
-
----
-
-### 📁 02-metadata-filtered — Smarter Retrieval
-
-**Concept**: Enhance retrieval by filtering documents BEFORE vector search using metadata like year, topic, and company mentions.
+## Project Structure
 
 ```
-Query → Extract Filters → Pre-Filter → Vector Search → Generate
+Trakref-Zendesk-ChatBot/
+├── src/
+│   ├── api/
+│   │   └── zendesk_client.py          # Zendesk Help API integration
+│   ├── config/
+│   │   └── settings.py                # Data models (Category, Section, Article)
+│   ├── pipeline/
+│   │   ├── naive/
+│   │   │   ├── ingest.py              # Basic ingestion pipeline
+│   │   │   └── generation.py          # Query → retrieve → generate
+│   │   ├── metadata/
+│   │   │   ├── ingest.py              # Metadata-filtered ingestion
+│   │   │   └── generation.py          # Generation with metadata filters
+│   │   └── hybrid/
+│   │       └── generation.py          # Hybrid search (vector + BM25)
+│   ├── retrieval/
+│   │   ├── common.py                  # Core retrieval & pre-filtering
+│   │   └── strategies/
+│   │       ├── naive.py               # Simple vector similarity
+│   │       ├── metadata-filtered.py   # Enhanced filtering strategies
+│   │       └── hybrid.py              # Hybrid retrieval (vector + BM25 + RRF)
+│   ├── text/
+│   │   ├── chunk.py                   # Document chunking with metadata
+│   │   └── clean.py                   # HTML → text conversion
+│   ├── vectorstore/
+│   │   └── mongoDB.py                 # Vector store setup & management
+│   ├── evals/
+│   │   ├── naive/
+│   │   │   ├── precision.py           # Retrieval precision metrics
+│   │   │   └── groundedness.py        # Answer faithfulness evaluation
+│   │   └── metadata/
+│   │       ├── comparison.py          # Naive vs Filtered comparison
+│   │       └── precision.py           # Category & relevance precision
+│   └── main.py                        # CLI entry point
+├── README.md
+├── requirements.txt
+└── .env                               # API keys (git-ignored)
 ```
 
-**What you'll learn**:
-- Extracting rich metadata (topics, companies, financial indicators)
-- MongoDB pre-filtering with vector search
-- Targeted retrieval for specific time periods or topics
-- Comparing filtered vs. unfiltered precision
+## Retrieval Strategies
 
-**New metadata fields**:
-- `year`, `decade` - Temporal filtering
-- `topic_buckets` - Insurance, acquisitions, investments, etc.
-- `companies_mentioned` - Apple, Coca-Cola, GEICO, etc.
-- `has_financials` - Contains dollar amounts or percentages
+### Naive RAG
+Simple vector similarity search, returns top-k documents (default: 5).
 
-**Files**:
-- `ingestion.py` - Extract metadata using fast string matching
-- `retrieval.py` - Filtered vector search
-- `generation.py` - Interactive Q&A with filters
-- `evals/latency.py` - Compare retrieval speed
-- `evals/precision_delta.py` - Measure precision improvement
+### Metadata-Filtered RAG
+Pre-filter before vector search using Zendesk's taxonomy:
+- `category_id` - Filter by help category
+- `section_id` - Filter by section
+- `updated_at` - Filter by article recency
 
-**Run it**:
-```bash
-python 02-metadata-filtered/ingestion.py
-python 02-metadata-filtered/generation.py
-# Try: "year:2020" then "How did Berkshire perform?"
+### Hybrid RAG
+Combines vector search with BM25 full-text search using Reciprocal Rank Fusion (RRF):
+- Vector search captures semantic similarity
+- BM25 captures exact keyword matches (acronyms, rare terms, exact phrases)
+- RRF merges results with configurable weights
+
+## Usage Examples
+
+### Programmatic Usage
+
+```python
+# Naive RAG
+from src.pipeline.naive.generation import generate_answer
+result = generate_answer("What is a work order?")
+print(result["answer"])
+
+# Metadata-Filtered RAG
+from src.pipeline.metadata.generation import generate_answer
+result = generate_answer(
+    "What new features were added?",
+    category_name="Release Notes"
+)
+
+# Hybrid RAG
+from src.pipeline.hybrid.generation import generate_answer
+result = generate_answer(
+    "TR4 installation guide",
+    vector_weight=0.5,
+    fulltext_weight=1.5
+)
 ```
 
----
-
-### 📁 03-hybrid-search — Best of Both Worlds
-
-**Concept**: Combine keyword search (BM25) with semantic search (vectors) for better retrieval. BM25 catches exact terms; vectors catch meaning.
-
-```
-Query → BM25 Search ─┬─→ Reciprocal Rank Fusion → Generate
-      → Vector Search ─┘
-```
-
-**What you'll learn**:
-- BM25 (TF-IDF based) retrieval
-- Reciprocal Rank Fusion (RRF) for combining results
-- When hybrid beats pure vector search
-- Tuning BM25/vector weights
-
-**When hybrid helps**:
-| Query | Vector Only | Hybrid |
-|-------|-------------|--------|
-| "GEICO earnings 2020" | ⚠️ May miss exact terms | ✅ Catches both |
-| "What makes a good investment?" | ✅ Semantic match | ✅ Also good |
-| "BRK.A stock split" | ⚠️ May miss ticker | ✅ Keyword match |
-
-**Files**:
-- `retrieval.py` - Hybrid search with RRF
-- `generation.py` - Interactive Q&A with weight tuning
-
-**No new ingestion needed** - uses existing MongoDB vectors!
-
-**Run it**:
-```bash
-python 03-hybrid-search/retrieval.py
-python 03-hybrid-search/generation.py
-# Try: "weights:0.7,0.3" to favor BM25
-```
-
----
-
-### 📁 04-graph-rag — Knowledge Graph Enhanced
-
-**Concept**: Build a knowledge graph of entities and relationships, then use graph traversal to find related context before vector search.
-
-```
-Query → Extract Entities → Graph Traversal → Find Related Docs
-                                    ↓
-                            Vector Search → Combine → Generate
-```
-
-**What you'll learn**:
-- Entity and relationship extraction with LLMs
-- Building knowledge graphs in Neo4j
-- Cypher queries for graph traversal
-- Combining graph context with vector search
-- Multi-hop reasoning
-
-**Graph structure**:
-```
-(Buffett)-[:MANAGES]->(Berkshire)
-(Berkshire)-[:OWNS]->(GEICO)
-(GEICO)-[:BELONGS_TO]->(Insurance Topic)
-(GEICO)-[:MENTIONED_IN]->(2020ltr.pdf)
-```
-
-**Files**:
-- `docker-compose.yml` - Neo4j setup
-- `graph_builder.py` - Extract entities, build graph
-- `retrieval.py` - Graph traversal + vector search
-- `generation.py` - Interactive Q&A
-- `evals/entity_extraction.py` - Measure entity extraction accuracy
-- `evals/multi_hop_reasoning.py` - Measure multi-hop path discovery
-
-**Run it**:
-```bash
-cd 04-graph-rag
-docker-compose up -d           # Start Neo4j
-python graph_builder.py -n 10  # Build graph (10 chunks for testing)
-python generation.py
-```
-
----
-
-### 📁 05-agentic-rag — Dynamic Decision Making
-
-**Concept**: An AI agent that dynamically decides WHETHER to retrieve, WHICH method to use, and WHETHER to retry with a different approach.
-
-```
-Query → Analyze → Decide: Retrieve? ─→ No: Use model knowledge
-                      ↓ Yes
-                Choose tool → Execute → Evaluate: Sufficient?
-                      ↑                      ↓ No
-                      └────── Retry ─────────┘
-                                             ↓ Yes
-                                         Synthesize Answer
-```
-
-**What you'll learn**:
-- ReAct (Reason + Act) agent pattern
-- Query analysis and decomposition
-- Tool selection (vector vs. filtered vs. none)
-- Self-evaluation and retry logic
-- Multi-step retrieval for complex questions
-
-**Agent capabilities**:
-1. **Decides IF** retrieval is needed
-2. **Chooses HOW** to retrieve (vector vs. filtered)
-3. **Decomposes** complex queries into sub-queries
-4. **Evaluates** if retrieved info is sufficient
-5. **Retries** with different approach if needed
-
-**Files**:
-- `tools.py` - Retrieval tools for the agent
-- `agent.py` - ReAct agent implementation
-- `generation.py` - Interactive mode
-- `evals/tool_selection.py` - Measure tool choice accuracy
-- `evals/query_decomposition.py` - Measure query breakdown quality
-- `evals/end_to_end.py` - Full pipeline evaluation
-
-**No new ingestion needed** - uses existing MongoDB vectors!
-
-**Run it**:
-```bash
-python 05-agentic-rag/generation.py
-# Try: "Compare insurance performance in 2008 vs 2020"
-```
-
----
-
-## Evaluation
-
-Each RAG pattern includes evaluation metrics:
-
-| Metric | What it Measures | Location |
-|--------|------------------|----------|
-| **Precision** | Relevant docs / Retrieved docs | `01-naive-rag/evals/` |
-| **Groundedness** | Is answer supported by context? | `01-naive-rag/evals/` |
-| **Latency** | Time to retrieve and generate | `02-metadata-filtered/evals/` |
-| **Precision Delta** | Improvement from filtering | `02-metadata-filtered/evals/` |
-| **Entity Extraction** | Accuracy of extracting entities from queries | `04-graph-rag/evals/` |
-| **Multi-Hop Reasoning** | Can graph find expected entity connections? | `04-graph-rag/evals/` |
-| **Tool Selection** | Does agent pick the right tool? | `05-agentic-rag/evals/` |
-| **Query Decomposition** | Quality of breaking down complex queries | `05-agentic-rag/evals/` |
-| **End-to-End** | Answer quality, behavior, latency | `05-agentic-rag/evals/` |
+### Running Evaluations
 
 ```bash
-# Run evaluations
-python 01-naive-rag/evals/precision.py
-python 01-naive-rag/evals/groundedness.py
-python 02-metadata-filtered/evals/latency.py
-python 02-metadata-filtered/evals/precision_delta.py
-python 04-graph-rag/evals/entity_extraction.py
-python 04-graph-rag/evals/multi_hop_reasoning.py
-python 05-agentic-rag/evals/tool_selection.py
-python 05-agentic-rag/evals/query_decomposition.py
-python 05-agentic-rag/evals/end_to_end.py
+# Compare naive vs metadata-filtered RAG
+python -m src.evals.metadata.comparison -k 5 --output results.json
+
+# Precision-only evaluation (faster)
+python -m src.evals.metadata.precision -k 5 --no-relevance
+
+# Naive RAG groundedness evaluation
+python -m src.evals.naive.groundedness -k 5
 ```
 
----
+## MongoDB Index Setup
+
+### Vector Search Index (required for all modes)
+
+```json
+{
+  "name": "naive",
+  "definition": {
+    "fields": [
+      {
+        "type": "vector",
+        "path": "embedding",
+        "numDimensions": 1536,
+        "similarity": "cosine"
+      }
+    ]
+  }
+}
+```
+
+### Full-Text Search Index (required for hybrid search)
+
+```json
+{
+  "name": "fulltext",
+  "definition": {
+    "analyzer": "lucene.standard",
+    "searchAnalyzer": "lucene.standard",
+    "mappings": {
+      "dynamic": false,
+      "fields": {
+        "text": {
+          "type": "string",
+          "analyzer": "lucene.standard"
+        }
+      }
+    }
+  }
+}
+```
+
+To create indexes:
+1. Go to MongoDB Atlas → Your Cluster → Atlas Search tab
+2. Click "Create Search Index" → Select "JSON Editor"
+3. Paste the configuration and set the name
+4. Wait for index status to become "Active"
+
+## Key Design Decisions
+
+1. **Metadata-First Approach**: Leverages Zendesk's existing taxonomy (Categories > Sections > Articles) rather than auto-extraction
+2. **Chunk Enrichment**: Prepends metadata to chunks for better context awareness
+3. **MongoDB Atlas**: Managed vector database with built-in filtering capabilities
+4. **Temperature=0.0**: Deterministic generation for consistent, fact-based answers
+5. **LLM-as-Judge**: Uses same LLM for evaluation to maintain consistency
 
 ## License
 
-MIT License - feel free to use this for learning and building!
-
----
-
-## Next Steps
-
-After completing this playbook, consider exploring:
-
-- **Reranking** - Add a cross-encoder reranker after retrieval
-- **Query Expansion** - Generate multiple query variations
-- **Contextual Chunking** - Chunk with document structure awareness
-- **Multi-modal RAG** - Add images and tables from PDFs
-- **RAG Fusion** - Generate multiple queries, retrieve, and fuse results
+MIT License
