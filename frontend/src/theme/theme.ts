@@ -2,14 +2,14 @@
 
 import { createTheme } from '@mui/material/styles';
 
-// Design tokens - Liquid Glass theme (Apple-inspired)
+// Design tokens - Light Glass theme (Apple-inspired)
 export const tokens = {
   colors: {
     primary: {
-      main: '#3b82f6',
+      main: '#00859b',
       light: '#60a5fa',
       dark: '#2563eb',
-      subtle: 'rgba(59, 130, 246, 0.12)',
+      subtle: 'rgba(59, 130, 246, 0.1)',
     },
     accent: {
       purple: '#8b5cf6',
@@ -18,40 +18,40 @@ export const tokens = {
       emerald: '#10b981',
     },
     background: {
-      app: '#0c0c0e',
-      surface: '#161618',
-      elevated: '#1c1c1e',
-      glass: 'rgba(255, 255, 255, 0.04)',
-      glassMedium: 'rgba(255, 255, 255, 0.06)',
-      glassStrong: 'rgba(255, 255, 255, 0.08)',
+      app: '#f5f5f7',
+      surface: '#ffffff',
+      elevated: '#ffffff',
+      glass: 'rgba(255, 255, 255, 0.72)',
+      glassMedium: 'rgba(255, 255, 255, 0.8)',
+      glassStrong: 'rgba(255, 255, 255, 0.9)',
     },
     text: {
-      primary: 'rgba(255, 255, 255, 0.92)',
-      secondary: 'rgba(255, 255, 255, 0.55)',
-      muted: 'rgba(255, 255, 255, 0.35)',
-      accent: '#60a5fa',
+      primary: 'rgba(0, 0, 0, 0.88)',
+      secondary: 'rgba(0, 0, 0, 0.55)',
+      muted: 'rgba(0, 0, 0, 0.4)',
+      accent: '#2563eb',
     },
     message: {
-      user: '#3b82f6',
+      user: '#00859b',
       userText: '#ffffff',
-      assistant: 'rgba(255, 255, 255, 0.04)',
-      assistantBorder: 'rgba(255, 255, 255, 0.08)',
+      assistant: 'rgba(0, 0, 0, 0.03)',
+      assistantBorder: 'rgba(0, 0, 0, 0.08)',
     },
     border: {
-      subtle: 'rgba(255, 255, 255, 0.06)',
-      medium: 'rgba(255, 255, 255, 0.1)',
-      strong: 'rgba(255, 255, 255, 0.15)',
+      subtle: 'rgba(0, 0, 0, 0.06)',
+      medium: 'rgba(0, 0, 0, 0.1)',
+      strong: '#00859b',
     },
   },
   shadows: {
-    sm: '0 1px 2px rgba(0, 0, 0, 0.2)',
-    md: '0 4px 16px rgba(0, 0, 0, 0.25)',
-    lg: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    xl: '0 16px 48px rgba(0, 0, 0, 0.35)',
-    glass: '0 8px 32px rgba(0, 0, 0, 0.12)',
-    inner: 'inset 0 1px 0 rgba(255, 255, 255, 0.04)',
-    card: '0 2px 8px rgba(0, 0, 0, 0.15)',
-    button: '0 2px 12px rgba(59, 130, 246, 0.25)',
+    sm: '0 1px 2px rgba(0, 0, 0, 0.06)',
+    md: '0 4px 16px rgba(0, 0, 0, 0.08)',
+    lg: '0 8px 32px rgba(0, 0, 0, 0.1)',
+    xl: '0 16px 48px rgba(0, 0, 0, 0.12)',
+    glass: '0 8px 32px rgba(0, 0, 0, 0.06)',
+    inner: 'inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+    card: '0 2px 8px rgba(0, 0, 0, 0.06)',
+    button: '0 2px 12px rgba(59, 130, 246, 0.2)',
   },
   blur: {
     sm: 'blur(12px)',
@@ -63,7 +63,7 @@ export const tokens = {
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
       main: tokens.colors.primary.main,
       light: tokens.colors.primary.light,
@@ -137,7 +137,7 @@ const theme = createTheme({
       styleOverrides: {
         body: {
           scrollbarWidth: 'thin',
-          scrollbarColor: `rgba(255, 255, 255, 0.15) transparent`,
+          scrollbarColor: `rgba(0, 0, 0, 0.15) transparent`,
         },
       },
     },
