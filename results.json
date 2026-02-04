@@ -1,0 +1,423 @@
+{
+  "configuration": {
+    "k": 5,
+    "num_test_cases": 8,
+    "category_specific_cases": 7
+  },
+  "naive_metrics": {
+    "groundedness_rate": 0.75,
+    "grounded_count": 6,
+    "avg_category_match_rate": 0.6
+  },
+  "filtered_metrics": {
+    "groundedness_rate": 0.875,
+    "grounded_count": 7,
+    "avg_category_match_rate": 1.0
+  },
+  "comparison": {
+    "filtered_wins": 5,
+    "naive_wins": 0,
+    "ties": 3,
+    "category_precision_improvement": 0.4,
+    "groundedness_improvement": 0.125
+  },
+  "results": [
+    {
+      "test_id": "release_notes_features",
+      "question": "What new features were added in the latest release?",
+      "expected_category": "Release Notes",
+      "naive_retrieval": {
+        "question": "What new features were added in the latest release?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Release Notes",
+          "Release Notes",
+          "Release Notes",
+          "Release Notes",
+          "Release Notes"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1773.2725143432617
+      },
+      "naive_generation": {
+        "answer": "The latest release, which is the October 2025 update, introduced the following new features:\n\n1. **Cylinder Transfers**: This feature allows record keepers to transfer gas between cylinders with the \"Transfer Gas to Another Cylinder\" action.\n2. **CARB R3 XML**: An export tool that enables California system owners to generate XML files suitable for batch import into CARB\u2019s R3 portal for annual reporting.\n\nNo additional new features were mentioned in the context provided.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the new features introduced in the October 2025 release as stated in Document 2. It correctly identifies \"Cylinder Transfers\" and \"CARB R3 XML\" as the new features without adding any unsupported claims or information. The statement that no additional new features were mentioned is also consistent with the context provided.",
+        "generation_time_ms": 2981.842279434204
+      },
+      "filtered_retrieval": {
+        "question": "What new features were added in the latest release?",
+        "method": "filtered",
+        "category_filter": "Release Notes",
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Release Notes",
+          "Release Notes",
+          "Release Notes",
+          "Release Notes",
+          "Release Notes"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1521.1312770843506
+      },
+      "filtered_generation": {
+        "answer": "The latest release, which is the October 2025 update, introduced the following new features:\n\n1. **Cylinder Transfers**: This feature allows record keepers to transfer gas between cylinders with the \"Transfer Gas to Another Cylinder\" action.\n2. **CARB R3 XML**: An export tool that enables California system owners to generate XML files suitable for batch import into CARB\u2019s R3 portal for annual reporting.\n\nNo additional new features were mentioned in the context provided.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the new features introduced in the October 2025 release as stated in Document 2. It does not include any unsupported claims or additional information beyond what is provided in the context. Therefore, the answer is fully supported by the context.",
+        "generation_time_ms": 3136.522054672241
+      },
+      "category_precision_delta": 0.0,
+      "both_grounded": true,
+      "winner": "tie"
+    },
+    {
+      "test_id": "release_notes_updates",
+      "question": "What updates were made to the work order system?",
+      "expected_category": "Release Notes",
+      "naive_retrieval": {
+        "question": "What updates were made to the work order system?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Release Notes",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4"
+        ],
+        "category_match_rate": 0.2,
+        "retrieval_time_ms": 1820.9881782531738
+      },
+      "naive_generation": {
+        "answer": "The updates made to the work order system include the following:\n\n1. The Work Orders Export now includes additional fields: State, Classification, and Region/Division.\n2. The Service Events Export now includes additional fields: State, Classification, and System Manager.\n3. User permission updates have been made in areas such as Account Details (Manage Your Regions and Divisions), Close Work Orders, and Global Search.\n4. The Repair Details section on the Leak Monitor Calibration service event detail screen now displays Alarm Set Point and Detection Limit.\n5. The Work Orders table has been updated to include features like column reordering (drag and drop), maintaining applied filters and customizations between sessions, and easier column sorting.\n\nNo specific updates to the editing process of work orders were mentioned in the context provided.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the updates mentioned in Document 1 regarding the work order system, including the new fields in exports, user permission updates, and features in the Work Orders table. However, it correctly notes that no specific updates to the editing process of work orders were mentioned, which aligns with the context provided. Therefore, the answer is fully supported by the context.",
+        "generation_time_ms": 3501.4867782592773
+      },
+      "filtered_retrieval": {
+        "question": "What updates were made to the work order system?",
+        "method": "filtered",
+        "category_filter": "Release Notes",
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Release Notes",
+          "Release Notes",
+          "Release Notes",
+          "Release Notes",
+          "Release Notes"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1504.4279098510742
+      },
+      "filtered_generation": {
+        "answer": "The updates made to the work order system include:\n\n1. **Work Orders Export**: Now includes State, Classification, and Region/Division.\n2. **User Permission Updates**: \n   - Permissions related to managing regions and divisions, closing work orders, and global search have been updated.\n3. **Column Updates**: The Work Orders table has been updated to include features such as column reordering (drag and drop), maintaining applied filters and customizations between sessions, and easier column sorting.\n4. **Bugs Fixed**: Issues related to saving comments under the Discussion tab and restoring the cancellation dropdown for work orders have been addressed.\n\nAdditional details about specific bugs or other features related to work orders were not provided in the context.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the updates mentioned in the context regarding the work order system, including the new features in the Work Orders Export, user permission updates, column updates, and bug fixes. Each claim made in the answer can be traced back to specific information provided in the context, without introducing any unsupported claims or additional details.",
+        "generation_time_ms": 3448.9901065826416
+      },
+      "category_precision_delta": 0.8,
+      "both_grounded": true,
+      "winner": "filtered"
+    },
+    {
+      "test_id": "getting_started_basics",
+      "question": "How do I get started with Trakref?",
+      "expected_category": "Getting Started",
+      "naive_retrieval": {
+        "question": "How do I get started with Trakref?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Getting Started",
+          "Getting Started",
+          "Tips and Troubleshooting",
+          "Using TR4",
+          "Using TR4"
+        ],
+        "category_match_rate": 0.4,
+        "retrieval_time_ms": 1768.718957901001
+      },
+      "naive_generation": {
+        "answer": "To get started with Trakref, you can utilize their all-in-one solution that includes features for compliance reporting, ESG reporting, refrigerant tracking, leak inspections, and more. Trakref is designed to be up and running rapidly, providing powerful software tools to manage leaks and extend equipment life.\n\nFor specific products, you can explore TR4, which is comprehensive refrigerant compliance software, or Trakref V3, an advanced refrigerant tracking app that simplifies the process of entering HVAC/R service tickets.\n\nIf you need further assistance or have specific questions, you can contact the Trakref support team by selecting the Support button in the lower right corner of each page in Trakref and providing detailed information about your inquiry.\n\nThe context does not provide step-by-step instructions on how to sign up or create an account with Trakref, which would be helpful for someone looking to get started.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately summarizes the features of Trakref's all-in-one solution, mentions specific products (TR4 and Trakref V3), and provides information on how to contact support, all of which are supported by the context. However, it correctly notes that the context does not provide step-by-step instructions for signing up or creating an account, which is a relevant point. Overall, the answer is well-supported by the context provided.",
+        "generation_time_ms": 5853.415012359619
+      },
+      "filtered_retrieval": {
+        "question": "How do I get started with Trakref?",
+        "method": "filtered",
+        "category_filter": "Getting Started",
+        "num_retrieved": 2,
+        "categories_retrieved": [
+          "Getting Started",
+          "Getting Started"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1490.6132221221924
+      },
+      "filtered_generation": {
+        "answer": "The context provided does not contain specific steps or instructions on how to get started with Trakref. It mentions that Trakref\u00ae is designed to be up and running rapidly and offers powerful software tools, but it does not detail the process for new users to begin using the service. \n\nTo summarize, I can tell you that Trakref\u00ae is designed for quick setup and offers various tools for managing compliance and refrigerant tracking, but I cannot provide specific steps on how to get started.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the context by stating that there are no specific steps or instructions provided for getting started with Trakref. It correctly notes that Trakref\u00ae is designed for quick setup and offers various tools, which is supported by the context. However, the answer does not introduce any unsupported claims or additional information beyond what is mentioned in the context.",
+        "generation_time_ms": 2562.049150466919
+      },
+      "category_precision_delta": 0.6,
+      "both_grounded": true,
+      "winner": "filtered"
+    },
+    {
+      "test_id": "troubleshooting_error",
+      "question": "What should I do if I encounter an error?",
+      "expected_category": "Tips and Troubleshooting",
+      "naive_retrieval": {
+        "question": "What should I do if I encounter an error?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Tips and Troubleshooting",
+          "Using TR4",
+          "Tips and Troubleshooting",
+          "Using TR4",
+          "Tips and Troubleshooting"
+        ],
+        "category_match_rate": 0.6,
+        "retrieval_time_ms": 1455.122709274292
+      },
+      "naive_generation": {
+        "answer": "If you encounter an error, you should contact the Trakref support team by selecting the Support button in the lower right corner of any page in Trakref. When completing the Support form, include as much information as possible to help the support team diagnose and resolve the issue. This information should include your name, email, account name, client location, and a detailed description of the problem, including any relevant identifiers like Username, Work Order ID, and Service Event ID.\n\nThe context does not specify what specific errors you might encounter or any troubleshooting steps to take before contacting support.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the information provided in the context about how to contact the Trakref support team and what information to include in the support form. However, it does not introduce any unsupported claims or details beyond what is mentioned in the context. The lack of specific error types or troubleshooting steps does not detract from the groundedness of the answer, as it focuses solely on the process of contacting support, which is well-supported by the context.",
+        "generation_time_ms": 3289.1578674316406
+      },
+      "filtered_retrieval": {
+        "question": "What should I do if I encounter an error?",
+        "method": "filtered",
+        "category_filter": "Tips and Troubleshooting",
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Tips and Troubleshooting",
+          "Tips and Troubleshooting",
+          "Tips and Troubleshooting",
+          "Tips and Troubleshooting",
+          "Tips and Troubleshooting"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1459.5410823822021
+      },
+      "filtered_generation": {
+        "answer": "If you encounter an error, you should contact the Trakref support team by clicking the Support button in the lower right corner of any page in Trakref. When completing the support form, include as much information as possible to help the support team diagnose and resolve the issue. This information should include your name, email, account name, client location, and a detailed description of the problem you are facing. \n\nIf you need specific troubleshooting assistance, you may also refer to the relevant articles in the Tips and Troubleshooting section for guidance on common issues.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the information provided in the context, specifically regarding how to contact the Trakref support team and what information to include in the support form. It also correctly suggests referring to relevant articles for troubleshooting assistance, which is supported by the context. There are no unsupported claims or additional information that is not present in the context.",
+        "generation_time_ms": 2616.304874420166
+      },
+      "category_precision_delta": 0.4,
+      "both_grounded": true,
+      "winner": "filtered"
+    },
+    {
+      "test_id": "using_tr4_service_event",
+      "question": "How do I record a service event in TR4?",
+      "expected_category": "Using TR4",
+      "naive_retrieval": {
+        "question": "How do I record a service event in TR4?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1469.4228172302246
+      },
+      "naive_generation": {
+        "answer": "To record a service event in TR4, follow these steps:\n\n1. **Create Service Event**: Start the Create Service Event workflow.\n2. **Enter Service Equipment Worked On**: Select the specific equipment that was serviced during the visit. Equipment details such as Material Type and Gas Capacity will appear.\n3. **Select Type of Service**: Choose the type of service you are recording (e.g., Install, Service or Leak Repair, Retrofit).\n4. **Complete Required Fields**: Fill in the necessary fields, including:\n   - **Primary Technician**: Select the primary technician from the dropdown list.\n   - **Secondary Technician**: Select the secondary technician if applicable.\n   - **Service Date**: Choose the date of service, which should be the date the technician(s) is onsite.\n5. **Additional Sections**: Depending on the type of service selected, additional sections may appear that need to be completed.\n6. **Complete the Form**: If there are any client-specific requirements (like Labor Hours or GL Code), fill those in as needed.\n7. **Save the Service Event**: Once all required sections are complete, select the COMPLETE button to save the service event.\n8. **Confirmation**: A window will appear confirming that the Service Event has been successfully created.\n9. **Navigate Options**: After creation, you can choose to view the Service Event, create a new Service Event, or return to the Work Order detail page.\n\nThis process outlines the general steps for recording a service event, but specific details may vary based on the type of service and client requirements.",
+        "is_grounded": false,
+        "grounding_reasoning": "The answer provides a detailed step-by-step process for recording a service event in TR4, which aligns with the information found in the provided context. Each step mentioned in the answer can be traced back to specific details in the context documents, such as selecting equipment, entering technician information, and saving the service event. However, the phrase \"this process outlines the general steps for recording a service event, but specific details may vary based on the type of service and client requirements\" introduces a generalization that is not explicitly supported by the context, as the context does not indicate variability in the process based on client requirements.",
+        "generation_time_ms": 6929.7614097595215
+      },
+      "filtered_retrieval": {
+        "question": "How do I record a service event in TR4?",
+        "method": "filtered",
+        "category_filter": "Using TR4",
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1435.2376461029053
+      },
+      "filtered_generation": {
+        "answer": "To record a service event in TR4, follow these steps:\n\n1. **Create Service Event**: Start the Create Service Event workflow.\n2. **Enter Service Equipment Worked On**: Select the specific equipment that was serviced during the visit. Equipment details such as Material Type and Gas Capacity will appear.\n3. **Select Type of Service**: Choose the type of service you are recording (e.g., Install, Service or Leak Repair, Retrofit).\n4. **Complete Required Fields**: Fill in the necessary fields, including:\n   - **Primary Technician**: Select the primary technician from the dropdown list.\n   - **Secondary Technician**: Select the secondary technician if applicable.\n   - **Service Date**: Choose the date of service, which should be the date the technician(s) is onsite.\n5. **Additional Sections**: Depending on the type of service selected, additional sections may appear that need to be completed.\n6. **Complete the Form**: If there are any client-specific requirements (like Labor Hours or GL Code), fill those in as needed.\n7. **Save the Service Event**: Once all required sections are complete, select the COMPLETE button to save the service event.\n8. **Confirmation**: A window will appear confirming that the Service Event has been successfully created.\n9. **Navigate Options**: After creation, you can choose to view the Service Event, create a new Service Event, or return to the Work Order detail page.\n\nThis process outlines the general steps for recording a service event in TR4. If you need specific details about any of the fields or options, please let me know!",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the steps outlined in the provided context for recording a service event in TR4. Each step mentioned in the answer corresponds to specific details found in the context, such as selecting equipment, choosing the type of service, and completing required fields. There are no unsupported claims or additional information that is not present in the context.",
+        "generation_time_ms": 9838.247537612915
+      },
+      "category_precision_delta": 0.0,
+      "both_grounded": false,
+      "winner": "filtered"
+    },
+    {
+      "test_id": "using_tr4_work_order",
+      "question": "How do I create and assign a work order?",
+      "expected_category": "Using TR4",
+      "naive_retrieval": {
+        "question": "How do I create and assign a work order?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1617.412805557251
+      },
+      "naive_generation": {
+        "answer": "To create a work order in TR4, follow these steps:\n\n1. Log into TR4.\n2. For service providers, navigate to the appropriate client account using the account drop-down in the top right corner.\n3. Click on \"Work Orders\" from the sidebar menu to go to the Work Order List page.\n4. Click on the \"Create Work Order +\" button in the top right corner of the Work Orders page.\n5. Fill in the Work Order Information fields on the Create Work Order page, including selecting the Work Order Type (either Scheduled Maintenance or Trouble/Problem Ticket) and completing the necessary details.\n6. Once all information is entered, click on the \"Create\" button to create the work order and return to the Work Order Page, or click on \"Create Work Order And Add Service Event\" to continue to the Add Service Event Page.\n\nTo assign a work order, follow these steps:\n\n1. Click the \"Support\" button in the bottom right corner for assistance.\n2. Select the option \"Assign Work Order.\"\n3. Complete the Assign Work Order form by selecting the service company, primary and secondary technicians, and entering the scheduled start date and due date.\n4. After entering all required information, click on the appropriate button to finalize the assignment.\n\nThe information provided does not specify the exact button to click after entering the assignment details, nor does it detail how to navigate back to the work order list after assignment.",
+        "is_grounded": false,
+        "grounding_reasoning": "The answer accurately outlines the steps to create a work order in TR4, as supported by the context provided in the documents. However, the section about assigning a work order includes a step to click the \"Support\" button, which is not relevant to the assignment process and is not supported by the context. Additionally, the answer does not specify the button to finalize the assignment, which is not explicitly mentioned in the context. Therefore, the answer contains unsupported claims and lacks completeness regarding the assignment process.",
+        "generation_time_ms": 6886.099338531494
+      },
+      "filtered_retrieval": {
+        "question": "How do I create and assign a work order?",
+        "method": "filtered",
+        "category_filter": "Using TR4",
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1627.2192001342773
+      },
+      "filtered_generation": {
+        "answer": "To create a work order in TR4, follow these steps:\n\n1. Log into TR4.\n2. For service providers, navigate to the appropriate client account using the account drop-down in the top right corner.\n3. Click on \"Work Orders\" from the sidebar menu to go to the Work Order List page.\n4. Click on the \"Create Work Order +\" button in the top right corner of the Work Orders page.\n5. Fill in the Work Order Information fields on the Create Work Order page. You will need to select the Work Order Type (either Scheduled Maintenance or Trouble/Problem Ticket) and complete the relevant fields.\n6. Once all details are entered, click on the \"Create\" button to create the work order and return to the Work Order Page, or click on \"Create Work Order And Add Service Event\" to continue to the Add Service Event Page.\n\nTo assign a work order, follow these steps:\n\n1. Click the \"Support\" button in the bottom right corner for assistance.\n2. Select the option \"Assign Work Order.\"\n3. Complete the Assign Work Order form by selecting the service company, primary and secondary technicians, and entering the scheduled start date and due date.\n4. After entering all required information, click on the appropriate button to finalize the assignment.\n\nThe information on how to finalize the assignment is incomplete in the provided context.",
+        "is_grounded": false,
+        "grounding_reasoning": "The answer provides a detailed step-by-step process for creating a work order in TR4, which is fully supported by the context provided in the documents. However, the section on assigning a work order includes a claim about clicking the \"Support\" button for assistance, which is not relevant to the assignment process and is not supported by the context. Additionally, the answer states that the information on how to finalize the assignment is incomplete, which is not explicitly mentioned in the context. Therefore, the answer contains unsupported claims and additional information not present in the context.",
+        "generation_time_ms": 6147.134065628052
+      },
+      "category_precision_delta": 0.0,
+      "both_grounded": false,
+      "winner": "tie"
+    },
+    {
+      "test_id": "support_contact",
+      "question": "How do I contact the support team?",
+      "expected_category": "Support Team",
+      "naive_retrieval": {
+        "question": "How do I contact the support team?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Tips and Troubleshooting",
+          "Using TR4",
+          "Tips and Troubleshooting",
+          "Using TR4",
+          "Tips and Troubleshooting"
+        ],
+        "category_match_rate": 0.0,
+        "retrieval_time_ms": 1747.6344108581543
+      },
+      "naive_generation": {
+        "answer": "You can contact the support team by selecting the Support button in the lower right corner of each page in Trakref. When completing the Support form, it's helpful to include as much information as possible, such as your name, email, account name, client location, and a detailed description of the issue you need help with.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately reflects the information provided in the context, specifically from Document 1 and Document 2, which both state that users can contact the support team by selecting the Support button and should include relevant information in the Support form. All claims made in the answer can be traced back to the context without introducing any unsupported details or assumptions.",
+        "generation_time_ms": 2686.7852210998535
+      },
+      "filtered_retrieval": {
+        "question": "How do I contact the support team?",
+        "method": "filtered",
+        "category_filter": "Support Team",
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Support Team",
+          "Support Team",
+          "Support Team",
+          "Support Team",
+          "Support Team"
+        ],
+        "category_match_rate": 1.0,
+        "retrieval_time_ms": 1692.7616596221924
+      },
+      "filtered_generation": {
+        "answer": "The provided context does not contain any information on how to contact the support team. It focuses on permissions and managing servicer locations and links within the Trakref system. Therefore, I cannot provide an answer regarding contacting the support team.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer correctly identifies that the provided context does not include any information on how to contact the support team, as it solely focuses on permissions and managing servicer locations and links. The answer does not introduce any unsupported claims or assumptions, making it consistent with the context.",
+        "generation_time_ms": 1862.3263835906982
+      },
+      "category_precision_delta": 1.0,
+      "both_grounded": true,
+      "winner": "filtered"
+    },
+    {
+      "test_id": "general_search",
+      "question": "What is global search in Trakref?",
+      "expected_category": null,
+      "naive_retrieval": {
+        "question": "What is global search in Trakref?",
+        "method": "naive",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Getting Started"
+        ],
+        "category_match_rate": 0.0,
+        "retrieval_time_ms": 1868.5622215270996
+      },
+      "naive_generation": {
+        "answer": "Global Search in Trakref is a feature that allows users to search for Work Orders, Locations, Service Events, or Inventory from any screen within the TR4 system. It enables quick searches across these categories, providing results that match the criteria entered in the search bar. As users update their search criteria, results are displayed instantaneously, and users can select an item from the results to be redirected to the corresponding detail page. The feature has been enhanced to provide a more organized and user-friendly layout for viewing search results.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately describes the Global Search feature in Trakref, including its ability to search for Work Orders, Locations, Service Events, and Inventory from any screen, the instantaneous display of results, and the redirection to detail pages. It also mentions the enhanced layout for viewing search results, which is supported by the context provided in the documents. Therefore, all claims in the answer can be traced back to the context without introducing unsupported information or assumptions.",
+        "generation_time_ms": 3099.844217300415
+      },
+      "filtered_retrieval": {
+        "question": "What is global search in Trakref?",
+        "method": "filtered",
+        "category_filter": null,
+        "num_retrieved": 5,
+        "categories_retrieved": [
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Using TR4",
+          "Getting Started"
+        ],
+        "category_match_rate": 0.0,
+        "retrieval_time_ms": 1760.5183124542236
+      },
+      "filtered_generation": {
+        "answer": "Global Search in Trakref is a feature that allows users to search for Work Orders, Locations, Service Events, or Inventory from any screen within the TR4 system. It enables quick searches across these categories, providing results that match the criteria entered in the search bar. As users update their search criteria, results are displayed instantaneously, and users can select an item from the results to be redirected to the corresponding detail page. The feature has been enhanced to provide a more organized and user-friendly layout for viewing search results.",
+        "is_grounded": true,
+        "grounding_reasoning": "The answer accurately describes the Global Search feature in Trakref, including its ability to search for Work Orders, Locations, Service Events, and Inventory from any screen, the instantaneous display of results, and the redirection to detail pages. It also mentions the enhanced layout for viewing search results, which is supported by the context provided in the documents. Therefore, all claims in the answer can be traced back to the context without introducing unsupported information or assumptions.",
+        "generation_time_ms": 2956.5770626068115
+      },
+      "category_precision_delta": 0.0,
+      "both_grounded": true,
+      "winner": "tie"
+    }
+  ]
+}
