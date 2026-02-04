@@ -494,14 +494,14 @@ The agent exists solely to manage failure cases through controlled retries and a
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    User Question                         │
+│                    User Question                        │
 └─────────────────────────────────────────────────────────┘
                            │
                            ▼
 ┌─────────────────────────────────────────────────────────┐
 │  1. RETRIEVE                                            │
 │     vector_search(query, top_k=6)                       │
-│     → documents[]                                        │
+│     → documents[]                                       │
 └─────────────────────────────────────────────────────────┘
                            │
                            ▼

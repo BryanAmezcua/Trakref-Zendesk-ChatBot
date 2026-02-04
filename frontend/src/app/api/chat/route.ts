@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { simulateAgentLoop } from '@/lib/mock/mockResponses';
+import { ChatResponse } from '@/types/chat';
+
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,25 +15,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Simulate the agent control loop with mock responses
-    const response = await simulateAgentLoop(message);
+    // Call the Python backend
+    const response = await fetch(`${BACKEND_URL}/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message,
+        sessionId,
+        top_k: 5,
+      }),
+    });
 
-    // Log for debugging (would be LangSmith in production)
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Backend error: ${response.status}`);
+    }
+
+    const chatResponse: ChatResponse = await response.json();
+
+    // Log for debugging
     console.log('[Chat API]', {
       sessionId,
       query: message,
       response: {
-        sufficient_context: response.sufficient_context,
-        citations_count: response.citations.length,
-        confidence: response.confidence,
+        sufficient_context: chatResponse.sufficient_context,
+        citations_count: chatResponse.citations.length,
+        confidence: chatResponse.confidence,
       },
     });
 
-    return NextResponse.json(response);
+    return NextResponse.json(chatResponse);
   } catch (error) {
     console.error('[Chat API Error]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
   }

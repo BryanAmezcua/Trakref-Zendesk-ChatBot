@@ -1,0 +1,15 @@
+{
+  "name": "trakref-zendesk-chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run frontend\"",
+    "server": ".venv\\Scripts\\python src/server.py",
+    "frontend": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "start": "npm run start --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { mockArticles, simulateDelay } from '@/lib/mock/mockResponses';
+
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { query, top_k = 6 } = body;
+    const { query, top_k = 6, category_id, section_id } = body;
 
     if (!query || typeof query !== 'string') {
       return NextResponse.json(
@@ -13,33 +14,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Simulate retrieval delay
-    await simulateDelay(500);
+    // Call the Python backend
+    const response = await fetch(`${BACKEND_URL}/retrieve`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query,
+        top_k,
+        category_id,
+        section_id,
+      }),
+    });
 
-    // Simple keyword matching to filter mock articles
-    const lowerQuery = query.toLowerCase();
-    const matchedArticles = mockArticles
-      .filter((article) => {
-        const searchText = `${article.title} ${article.chunk_text}`.toLowerCase();
-        const queryWords = lowerQuery.split(' ').filter((w) => w.length > 2);
-        return queryWords.some((word) => searchText.includes(word));
-      })
-      .slice(0, top_k);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || `Backend error: ${response.status}`);
+    }
 
-    // If no matches, return top articles anyway
-    const results = matchedArticles.length > 0
-      ? matchedArticles
-      : mockArticles.slice(0, Math.min(top_k, 3));
+    const retrieveResponse = await response.json();
 
     return NextResponse.json({
       query,
       top_k,
-      documents: results,
+      documents: retrieveResponse.documents,
     });
   } catch (error) {
     console.error('[Retrieve API Error]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
   }
