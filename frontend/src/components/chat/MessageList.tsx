@@ -6,8 +6,7 @@ import { useEffect, useRef } from 'react';
 import { Message } from '@/types/chat';
 import MessageBubble from './MessageBubble';
 import SuggestedPrompts from './SuggestedPrompts';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { tokens } from '@/theme/theme';
 
 interface MessageListProps {
@@ -41,143 +40,43 @@ export default function MessageList({ messages, onSuggestionClick }: MessageList
           gap: 4,
           p: 4,
           textAlign: 'center',
-          position: 'relative',
         }}
       >
-        {/* Animated logo container */}
+        {/* Simple logo container */}
         <motion.div
-          initial={{ scale: 0.5, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.6, ease: [0.175, 0.885, 0.32, 1.275] }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
         >
           <Box
             sx={{
-              position: 'relative',
-              width: 140,
-              height: 140,
+              width: 72,
+              height: 72,
+              borderRadius: 4,
+              background: tokens.colors.background.glassMedium,
+              border: `1px solid ${tokens.colors.border.subtle}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            {/* Outer ring */}
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                borderRadius: '50%',
-                border: `2px dashed ${tokens.colors.border.accent}`,
-                opacity: 0.4,
-              }}
-            />
-
-            {/* Middle ring with gradient */}
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                inset: 15,
-                borderRadius: '50%',
-                background: `conic-gradient(from 0deg, transparent, ${tokens.colors.primary.main}40, transparent)`,
-              }}
-            />
-
-            {/* Pulsing glow */}
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              style={{
-                position: 'absolute',
-                inset: 20,
-                borderRadius: '50%',
-                background: tokens.colors.primary.gradient,
-                filter: 'blur(20px)',
-              }}
-            />
-
-            {/* Inner circle with icon */}
-            <motion.div
-              animate={{
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            >
-              <Box
-                sx={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: '50%',
-                  background: tokens.colors.primary.gradientVibrant,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: tokens.shadows.glowStrong,
-                  position: 'relative',
-                  zIndex: 1,
-                }}
-              >
-                <AutoAwesomeIcon sx={{ fontSize: 40, color: 'white' }} />
-              </Box>
-            </motion.div>
-
-            {/* Floating particles */}
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                animate={{
-                  y: [0, -20, 0],
-                  x: [0, Math.sin(i * 60 * Math.PI / 180) * 10, 0],
-                  opacity: [0.4, 1, 0.4],
-                }}
-                transition={{
-                  duration: 3 + i * 0.5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: i * 0.3,
-                }}
-                style={{
-                  position: 'absolute',
-                  width: 6,
-                  height: 6,
-                  borderRadius: '50%',
-                  background: tokens.colors.primary.light,
-                  top: `${20 + Math.random() * 60}%`,
-                  left: `${20 + Math.random() * 60}%`,
-                }}
-              />
-            ))}
+            <ChatBubbleOutlineIcon sx={{ fontSize: 32, color: tokens.colors.primary.light }} />
           </Box>
         </motion.div>
 
         {/* Welcome text */}
         <motion.div
-          initial={{ y: 30, opacity: 0 }}
+          initial={{ y: 16, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
+          transition={{ delay: 0.15, duration: 0.4 }}
         >
           <Typography
             sx={{
-              fontWeight: 700,
-              fontSize: '2rem',
-              background: tokens.colors.primary.gradientLight,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              mb: 1.5,
-              letterSpacing: '-0.03em',
+              fontWeight: 600,
+              fontSize: '1.5rem',
+              color: tokens.colors.text.primary,
+              mb: 1,
+              letterSpacing: '-0.02em',
             }}
           >
             Welcome to Trakref HelpBot
@@ -185,22 +84,21 @@ export default function MessageList({ messages, onSuggestionClick }: MessageList
           <Typography
             sx={{
               color: tokens.colors.text.secondary,
-              maxWidth: 480,
-              lineHeight: 1.7,
-              fontSize: '1rem',
+              maxWidth: 400,
+              lineHeight: 1.6,
+              fontSize: '0.9rem',
               mx: 'auto',
             }}
           >
-            Your AI-powered assistant for refrigerant tracking, compliance reporting,
-            asset management, and everything Trakref.
+            Your AI assistant for refrigerant tracking, compliance, and asset management.
           </Typography>
         </motion.div>
 
         {/* Feature chips */}
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
+          initial={{ y: 12, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.4 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
         >
           <Box
             sx={{
@@ -208,35 +106,30 @@ export default function MessageList({ messages, onSuggestionClick }: MessageList
               flexWrap: 'wrap',
               justifyContent: 'center',
               gap: 1,
-              mb: 2,
+              mb: 1,
             }}
           >
             {['Instant Answers', 'Help Articles', 'Step-by-Step Guides'].map((feature, i) => (
               <motion.div
                 key={feature}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.6 + i * 0.1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 + i * 0.08 }}
               >
                 <Box
                   sx={{
-                    px: 2,
-                    py: 0.75,
-                    borderRadius: 3,
-                    backgroundColor: 'rgba(8, 145, 178, 0.1)',
-                    border: `1px solid ${tokens.colors.border.accent}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.75,
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 2,
+                    backgroundColor: tokens.colors.background.glass,
+                    border: `1px solid ${tokens.colors.border.subtle}`,
                   }}
                 >
-                  <RocketLaunchIcon sx={{ fontSize: 14, color: tokens.colors.primary.light }} />
                   <Typography
                     sx={{
-                      color: tokens.colors.text.accent,
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      letterSpacing: '0.02em',
+                      color: tokens.colors.text.muted,
+                      fontSize: '0.7rem',
+                      fontWeight: 500,
                     }}
                   >
                     {feature}
@@ -249,19 +142,19 @@ export default function MessageList({ messages, onSuggestionClick }: MessageList
 
         {/* Suggested prompts */}
         <motion.div
-          initial={{ y: 30, opacity: 0 }}
+          initial={{ y: 16, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          style={{ width: '100%', maxWidth: 600 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          style={{ width: '100%', maxWidth: 560 }}
         >
           <Typography
             sx={{
               color: tokens.colors.text.muted,
               textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              fontWeight: 600,
-              fontSize: '0.7rem',
-              mb: 2,
+              letterSpacing: '0.08em',
+              fontWeight: 500,
+              fontSize: '0.65rem',
+              mb: 1.5,
             }}
           >
             Try asking

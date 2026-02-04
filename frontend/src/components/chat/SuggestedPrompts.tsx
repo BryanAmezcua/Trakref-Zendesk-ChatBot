@@ -25,51 +25,38 @@ export default function SuggestedPrompts({ prompts, onSelect }: SuggestedPrompts
           gap: 1.5,
         }}
       >
-        {prompts.map((prompt, index) => (
+        {prompts.map((prompt) => (
           <motion.div
             key={prompt}
             variants={staggerItem}
             whileHover={{
-              y: -4,
-              transition: { duration: 0.2 },
+              y: -2,
+              transition: { duration: 0.15 },
             }}
             whileTap={{ scale: 0.98 }}
           >
             <Box
               onClick={() => onSelect?.(prompt)}
               sx={{
-                px: 2.5,
-                py: 2,
+                px: 2,
+                py: 1.75,
                 borderRadius: 3,
                 backgroundColor: tokens.colors.background.glass,
                 backdropFilter: tokens.blur.sm,
                 WebkitBackdropFilter: tokens.blur.sm,
                 border: `1px solid ${tokens.colors.border.subtle}`,
                 cursor: 'pointer',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 2,
-                position: 'relative',
-                overflow: 'hidden',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  inset: 0,
-                  background: `linear-gradient(135deg, transparent 0%, ${tokens.colors.primary.main}08 100%)`,
-                  opacity: 0,
-                  transition: 'opacity 0.3s',
-                },
+                gap: 1.5,
                 '&:hover': {
-                  borderColor: tokens.colors.border.accent,
-                  boxShadow: tokens.shadows.glow,
-                  '&::before': {
-                    opacity: 1,
-                  },
+                  backgroundColor: tokens.colors.background.glassMedium,
+                  borderColor: tokens.colors.border.medium,
                   '& .prompt-arrow': {
-                    transform: 'translateX(4px)',
-                    color: tokens.colors.primary.light,
+                    transform: 'translateX(3px)',
+                    opacity: 1,
                   },
                   '& .prompt-text': {
                     color: tokens.colors.text.primary,
@@ -80,13 +67,11 @@ export default function SuggestedPrompts({ prompts, onSelect }: SuggestedPrompts
               <Typography
                 className="prompt-text"
                 sx={{
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
+                  fontSize: '0.85rem',
+                  fontWeight: 400,
                   color: tokens.colors.text.secondary,
-                  lineHeight: 1.5,
+                  lineHeight: 1.4,
                   transition: 'color 0.2s',
-                  position: 'relative',
-                  zIndex: 1,
                 }}
               >
                 {prompt}
@@ -94,9 +79,10 @@ export default function SuggestedPrompts({ prompts, onSelect }: SuggestedPrompts
               <ArrowForwardIcon
                 className="prompt-arrow"
                 sx={{
-                  fontSize: 16,
+                  fontSize: 14,
                   color: tokens.colors.text.muted,
-                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  opacity: 0.5,
+                  transition: 'all 0.2s ease',
                   flexShrink: 0,
                 }}
               />

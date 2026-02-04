@@ -2,78 +2,62 @@
 
 import { createTheme } from '@mui/material/styles';
 
-// Design tokens - Premium elegant theme
+// Design tokens - Liquid Glass theme (Apple-inspired)
 export const tokens = {
   colors: {
     primary: {
-      main: '#0891b2',
-      light: '#22d3ee',
-      dark: '#0e7490',
-      gradient: 'linear-gradient(135deg, #0891b2 0%, #0e7490 50%, #164e63 100%)',
-      gradientLight: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
-      gradientVibrant: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 50%, #0e7490 100%)',
+      main: '#3b82f6',
+      light: '#60a5fa',
+      dark: '#2563eb',
+      subtle: 'rgba(59, 130, 246, 0.12)',
     },
     accent: {
       purple: '#8b5cf6',
       pink: '#ec4899',
       amber: '#f59e0b',
       emerald: '#10b981',
-      gradient: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
     },
     background: {
-      app: '#0f172a',
-      chat: '#1e293b',
-      card: '#334155',
-      input: '#1e293b',
-      glass: 'rgba(30, 41, 59, 0.8)',
-      glassDark: 'rgba(15, 23, 42, 0.95)',
-      glassLight: 'rgba(51, 65, 85, 0.6)',
-      elevated: 'linear-gradient(145deg, #1e293b 0%, #0f172a 100%)',
+      app: '#0c0c0e',
+      surface: '#161618',
+      elevated: '#1c1c1e',
+      glass: 'rgba(255, 255, 255, 0.04)',
+      glassMedium: 'rgba(255, 255, 255, 0.06)',
+      glassStrong: 'rgba(255, 255, 255, 0.08)',
     },
     text: {
-      primary: '#f8fafc',
-      secondary: '#94a3b8',
-      muted: '#64748b',
-      accent: '#22d3ee',
+      primary: 'rgba(255, 255, 255, 0.92)',
+      secondary: 'rgba(255, 255, 255, 0.55)',
+      muted: 'rgba(255, 255, 255, 0.35)',
+      accent: '#60a5fa',
     },
     message: {
-      user: 'linear-gradient(135deg, #0891b2 0%, #0e7490 100%)',
+      user: '#3b82f6',
       userText: '#ffffff',
-      assistant: 'rgba(30, 41, 59, 0.95)',
-      assistantBorder: 'rgba(51, 65, 85, 0.5)',
+      assistant: 'rgba(255, 255, 255, 0.04)',
+      assistantBorder: 'rgba(255, 255, 255, 0.08)',
     },
     border: {
-      subtle: 'rgba(148, 163, 184, 0.1)',
-      medium: 'rgba(148, 163, 184, 0.2)',
-      accent: 'rgba(8, 145, 178, 0.3)',
+      subtle: 'rgba(255, 255, 255, 0.06)',
+      medium: 'rgba(255, 255, 255, 0.1)',
+      strong: 'rgba(255, 255, 255, 0.15)',
     },
   },
   shadows: {
-    sm: '0 1px 2px rgba(0, 0, 0, 0.3)',
-    md: '0 4px 12px rgba(0, 0, 0, 0.4)',
-    lg: '0 12px 40px rgba(0, 0, 0, 0.5)',
-    xl: '0 25px 50px -12px rgba(0, 0, 0, 0.6)',
-    glow: '0 0 30px rgba(8, 145, 178, 0.3)',
-    glowStrong: '0 0 50px rgba(8, 145, 178, 0.4), 0 0 100px rgba(8, 145, 178, 0.2)',
-    glass: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.05)',
-    inner: 'inset 0 2px 4px rgba(0, 0, 0, 0.3)',
-    card: '0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+    sm: '0 1px 2px rgba(0, 0, 0, 0.2)',
+    md: '0 4px 16px rgba(0, 0, 0, 0.25)',
+    lg: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    xl: '0 16px 48px rgba(0, 0, 0, 0.35)',
+    glass: '0 8px 32px rgba(0, 0, 0, 0.12)',
+    inner: 'inset 0 1px 0 rgba(255, 255, 255, 0.04)',
+    card: '0 2px 8px rgba(0, 0, 0, 0.15)',
+    button: '0 2px 12px rgba(59, 130, 246, 0.25)',
   },
   blur: {
-    sm: 'blur(8px)',
-    md: 'blur(16px)',
-    lg: 'blur(24px)',
-    xl: 'blur(40px)',
-  },
-  gradients: {
-    mesh: `
-      radial-gradient(at 40% 20%, rgba(8, 145, 178, 0.15) 0px, transparent 50%),
-      radial-gradient(at 80% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
-      radial-gradient(at 0% 50%, rgba(236, 72, 153, 0.08) 0px, transparent 50%),
-      radial-gradient(at 80% 50%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, rgba(8, 145, 178, 0.1) 0px, transparent 50%)
-    `,
-    shimmer: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)',
+    sm: 'blur(12px)',
+    md: 'blur(20px)',
+    lg: 'blur(32px)',
+    xl: 'blur(48px)',
   },
 };
 
@@ -93,7 +77,7 @@ const theme = createTheme({
     },
     background: {
       default: tokens.colors.background.app,
-      paper: tokens.colors.background.chat,
+      paper: tokens.colors.background.surface,
     },
     text: {
       primary: tokens.colors.text.primary,
@@ -110,52 +94,50 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif",
     h1: {
-      fontSize: '2.5rem',
-      fontWeight: 700,
-      letterSpacing: '-0.03em',
-      background: tokens.colors.primary.gradientLight,
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
+      fontSize: '2rem',
+      fontWeight: 600,
+      letterSpacing: '-0.02em',
+      color: tokens.colors.text.primary,
     },
     h2: {
-      fontSize: '1.75rem',
-      fontWeight: 700,
-      letterSpacing: '-0.02em',
+      fontSize: '1.5rem',
+      fontWeight: 600,
+      letterSpacing: '-0.015em',
     },
     h5: {
-      fontWeight: 700,
-      letterSpacing: '-0.02em',
-    },
-    h6: {
       fontWeight: 600,
       letterSpacing: '-0.01em',
     },
+    h6: {
+      fontWeight: 500,
+      letterSpacing: '-0.005em',
+    },
     body1: {
       fontSize: '1rem',
-      lineHeight: 1.7,
-      letterSpacing: '0.01em',
+      lineHeight: 1.6,
+      letterSpacing: '-0.01em',
     },
     body2: {
       fontSize: '0.875rem',
-      lineHeight: 1.7,
-      letterSpacing: '0.01em',
+      lineHeight: 1.6,
+      letterSpacing: '-0.005em',
     },
     caption: {
       fontSize: '0.75rem',
-      letterSpacing: '0.02em',
+      letterSpacing: '0em',
     },
   },
   shape: {
-    borderRadius: 16,
+    borderRadius: 20,
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
           scrollbarWidth: 'thin',
-          scrollbarColor: `${tokens.colors.primary.dark} transparent`,
+          scrollbarColor: `rgba(255, 255, 255, 0.15) transparent`,
         },
       },
     },
@@ -163,30 +145,30 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
-          fontWeight: 600,
+          fontWeight: 500,
           borderRadius: 12,
           padding: '10px 20px',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s ease',
           '&:hover': {
-            transform: 'translateY(-2px)',
-            boxShadow: tokens.shadows.glow,
+            transform: 'scale(1.02)',
           },
           '&:active': {
-            transform: 'translateY(0)',
+            transform: 'scale(0.98)',
           },
         },
         contained: {
-          background: tokens.colors.primary.gradient,
-          boxShadow: tokens.shadows.md,
+          backgroundColor: tokens.colors.primary.main,
+          boxShadow: tokens.shadows.button,
           '&:hover': {
-            background: tokens.colors.primary.gradient,
+            backgroundColor: tokens.colors.primary.light,
+            boxShadow: tokens.shadows.button,
           },
         },
         outlined: {
-          borderColor: tokens.colors.border.accent,
+          borderColor: tokens.colors.border.medium,
           '&:hover': {
-            borderColor: tokens.colors.primary.main,
-            background: 'rgba(8, 145, 178, 0.1)',
+            borderColor: tokens.colors.border.strong,
+            backgroundColor: tokens.colors.background.glass,
           },
         },
       },
@@ -194,10 +176,9 @@ const theme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s ease',
           '&:hover': {
-            transform: 'scale(1.1)',
-            background: 'rgba(8, 145, 178, 0.15)',
+            backgroundColor: tokens.colors.background.glassMedium,
           },
           '&:active': {
             transform: 'scale(0.95)',
@@ -209,7 +190,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
-          backgroundColor: tokens.colors.background.chat,
+          backgroundColor: tokens.colors.background.surface,
           boxShadow: tokens.shadows.card,
         },
       },
@@ -217,7 +198,7 @@ const theme = createTheme({
     MuiChip: {
       styleOverrides: {
         root: {
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'all 0.2s ease',
           fontWeight: 500,
         },
       },
@@ -225,11 +206,12 @@ const theme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: tokens.colors.background.card,
+          backgroundColor: tokens.colors.background.elevated,
           border: `1px solid ${tokens.colors.border.subtle}`,
           boxShadow: tokens.shadows.md,
           fontSize: '0.75rem',
           fontWeight: 500,
+          backdropFilter: tokens.blur.md,
         },
       },
     },

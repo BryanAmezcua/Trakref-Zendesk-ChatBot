@@ -31,7 +31,7 @@ const stageConfig = {
   idle: {
     icon: SearchIcon,
     message: 'Thinking',
-    color: tokens.colors.primary.light,
+    color: tokens.colors.text.secondary,
   },
 };
 
@@ -48,49 +48,49 @@ export default function LoadingIndicator({ stage = 'searching' }: LoadingIndicat
         display: 'flex',
         flexDirection: 'column',
         gap: 2,
-        py: 1,
+        py: 0.5,
       }}
     >
       {/* Stage message with animated dots */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={stage}
-            initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.8, rotate: 10 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
           >
             <Box
               sx={{
-                width: 32,
-                height: 32,
+                width: 28,
+                height: 28,
                 borderRadius: 2,
-                backgroundColor: `${config.color}20`,
+                backgroundColor: tokens.colors.background.glassMedium,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Icon sx={{ fontSize: 18, color: config.color }} />
+              <Icon sx={{ fontSize: 16, color: config.color }} />
             </Box>
           </motion.div>
         </AnimatePresence>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={stage}
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
-              transition={{ duration: 0.2 }}
+              exit={{ opacity: 0, x: 8 }}
+              transition={{ duration: 0.15 }}
             >
               <Typography
                 sx={{
                   color: tokens.colors.text.secondary,
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
+                  fontSize: '0.85rem',
+                  fontWeight: 400,
                 }}
               >
                 {config.message}
@@ -99,25 +99,24 @@ export default function LoadingIndicator({ stage = 'searching' }: LoadingIndicat
           </AnimatePresence>
 
           {/* Animated dots */}
-          <Box sx={{ display: 'flex', gap: 0.5, ml: 0.5 }}>
+          <Box sx={{ display: 'flex', gap: 0.5, ml: 0.25 }}>
             {[0, 1, 2].map((i) => (
               <motion.div
                 key={i}
                 animate={{
-                  opacity: [0.3, 1, 0.3],
-                  scale: [0.8, 1, 0.8],
+                  opacity: [0.3, 0.8, 0.3],
                 }}
                 transition={{
-                  duration: 1.2,
+                  duration: 1,
                   repeat: Infinity,
                   ease: 'easeInOut',
                   delay: i * 0.15,
                 }}
                 style={{
-                  width: 5,
-                  height: 5,
+                  width: 4,
+                  height: 4,
                   borderRadius: '50%',
-                  backgroundColor: config.color,
+                  backgroundColor: tokens.colors.text.muted,
                 }}
               />
             ))}
@@ -129,7 +128,7 @@ export default function LoadingIndicator({ stage = 'searching' }: LoadingIndicat
       <Box
         sx={{
           display: 'flex',
-          gap: 0.75,
+          gap: 0.5,
           alignItems: 'center',
         }}
       >
@@ -142,29 +141,28 @@ export default function LoadingIndicator({ stage = 'searching' }: LoadingIndicat
               key={s}
               sx={{
                 flex: 1,
-                height: 4,
-                borderRadius: 2,
-                backgroundColor: tokens.colors.background.card,
+                height: 3,
+                borderRadius: 1.5,
+                backgroundColor: tokens.colors.background.glassMedium,
                 overflow: 'hidden',
-                position: 'relative',
               }}
             >
               {(isCompleted || isCurrent) && (
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{
-                    width: isCompleted ? '100%' : isCurrent ? '60%' : '0%',
+                    width: isCompleted ? '100%' : isCurrent ? '50%' : '0%',
                   }}
                   transition={{
-                    duration: isCurrent ? 2 : 0.5,
+                    duration: isCurrent ? 2 : 0.4,
                     ease: isCurrent ? 'linear' : 'easeOut',
                   }}
                   style={{
                     height: '100%',
-                    background: isCompleted
+                    backgroundColor: isCompleted
                       ? tokens.colors.accent.emerald
-                      : `linear-gradient(90deg, ${config.color}, ${config.color}80)`,
-                    borderRadius: 2,
+                      : config.color,
+                    borderRadius: 1.5,
                   }}
                 />
               )}
@@ -178,7 +176,7 @@ export default function LoadingIndicator({ stage = 'searching' }: LoadingIndicat
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          px: 0.5,
+          px: 0.25,
         }}
       >
         {stages.map((s, i) => {
@@ -189,16 +187,16 @@ export default function LoadingIndicator({ stage = 'searching' }: LoadingIndicat
             <Typography
               key={s}
               sx={{
-                fontSize: '0.65rem',
-                fontWeight: 600,
+                fontSize: '0.6rem',
+                fontWeight: 500,
                 textTransform: 'uppercase',
-                letterSpacing: '0.05em',
+                letterSpacing: '0.04em',
                 color: isCompleted
                   ? tokens.colors.accent.emerald
                   : isCurrent
-                  ? config.color
+                  ? tokens.colors.text.secondary
                   : tokens.colors.text.muted,
-                transition: 'color 0.3s',
+                transition: 'color 0.2s',
               }}
             >
               {s === 'searching' ? 'Search' : s === 'reading' ? 'Read' : 'Write'}

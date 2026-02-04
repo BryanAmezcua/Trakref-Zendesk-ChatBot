@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ArticleIcon from '@mui/icons-material/Article';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useState } from 'react';
 import { Citation } from '@/types/chat';
@@ -52,7 +52,7 @@ export default function SourcesAccordion({ citations }: SourcesAccordionProps) {
             animate={{ rotate: expanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <ExpandMoreIcon sx={{ fontSize: 18, color: 'primary.main' }} />
+            <ExpandMoreIcon sx={{ fontSize: 16, color: tokens.colors.text.muted }} />
           </motion.div>
         }
         sx={{
@@ -61,22 +61,21 @@ export default function SourcesAccordion({ citations }: SourcesAccordionProps) {
           },
         }}
       >
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          <Chip
-            size="small"
-            label={`${citations.length} source${citations.length > 1 ? 's' : ''}`}
-            sx={{
-              background: tokens.colors.primary.gradient,
-              color: 'white',
-              fontSize: '0.75rem',
-              height: 26,
-              fontWeight: 500,
-              '& .MuiChip-label': {
-                px: 1.5,
-              },
-            }}
-          />
-        </motion.div>
+        <Chip
+          size="small"
+          label={`${citations.length} source${citations.length > 1 ? 's' : ''}`}
+          sx={{
+            backgroundColor: tokens.colors.background.glassMedium,
+            color: tokens.colors.text.secondary,
+            fontSize: '0.7rem',
+            height: 24,
+            fontWeight: 500,
+            border: `1px solid ${tokens.colors.border.subtle}`,
+            '& .MuiChip-label': {
+              px: 1.25,
+            },
+          }}
+        />
       </AccordionSummary>
       <AccordionDetails sx={{ pt: 1.5, pb: 0, px: 0 }}>
         <AnimatePresence>
@@ -87,11 +86,11 @@ export default function SourcesAccordion({ citations }: SourcesAccordionProps) {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
             >
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
                 {citations.map((citation, index) => (
                   <motion.div
                     key={citation.article_id || index}
-                    initial={{ opacity: 0, x: -10 }}
+                    initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
@@ -108,42 +107,41 @@ export default function SourcesAccordion({ citations }: SourcesAccordionProps) {
                         sx={{
                           display: 'flex',
                           alignItems: 'flex-start',
-                          gap: 1.5,
-                          p: 1.5,
-                          borderRadius: 2,
-                          backgroundColor: 'rgba(0, 133, 155, 0.04)',
-                          border: '1px solid rgba(0, 133, 155, 0.1)',
-                          transition: 'all 0.2s',
+                          gap: 1.25,
+                          p: 1.25,
+                          borderRadius: 0.5,
+                          backgroundColor: tokens.colors.background.glass,
+                          border: `1px solid ${tokens.colors.border.subtle}`,
+                          transition: 'all 0.2s ease',
                           cursor: 'pointer',
                           '&:hover': {
-                            backgroundColor: 'rgba(0, 133, 155, 0.08)',
-                            borderColor: 'rgba(0, 133, 155, 0.2)',
-                            transform: 'translateX(4px)',
+                            backgroundColor: tokens.colors.background.glassMedium,
+                            borderColor: tokens.colors.border.medium,
                           },
                         }}
                       >
                         <Box
                           sx={{
-                            width: 32,
-                            height: 32,
+                            width: 28,
+                            height: 28,
                             borderRadius: 1.5,
-                            backgroundColor: 'rgba(0, 133, 155, 0.1)',
+                            backgroundColor: tokens.colors.background.glassMedium,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0,
                           }}
                         >
-                          <ArticleIcon
-                            sx={{ fontSize: 18, color: 'primary.main' }}
+                          <ArticleOutlinedIcon
+                            sx={{ fontSize: 15, color: tokens.colors.text.secondary }}
                           />
                         </Box>
                         <Box sx={{ flex: 1, minWidth: 0 }}>
                           <Typography
                             sx={{
-                              color: 'primary.main',
+                              color: tokens.colors.text.secondary,
                               fontWeight: 500,
-                              fontSize: '0.85rem',
+                              fontSize: '0.8rem',
                               lineHeight: 1.4,
                               display: 'flex',
                               alignItems: 'center',
@@ -151,13 +149,13 @@ export default function SourcesAccordion({ citations }: SourcesAccordionProps) {
                             }}
                           >
                             {citation.title}
-                            <OpenInNewIcon sx={{ fontSize: 14, opacity: 0.7 }} />
+                            <OpenInNewIcon sx={{ fontSize: 12, opacity: 0.5 }} />
                           </Typography>
                           <Typography
                             variant="caption"
                             sx={{
-                              color: 'text.secondary',
-                              fontSize: '0.7rem',
+                              color: tokens.colors.text.muted,
+                              fontSize: '0.65rem',
                             }}
                           >
                             {citation.article_id}

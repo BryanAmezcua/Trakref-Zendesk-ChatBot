@@ -10,7 +10,7 @@ import {
 import { motion } from 'framer-motion';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { useChatStore } from '@/store/chatStore';
 import { tokens } from '@/theme/theme';
 import MessageList from './MessageList';
@@ -43,71 +43,12 @@ export default function ChatLayout() {
         position: 'relative',
       }}
     >
-      {/* Animated background mesh */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          background: tokens.gradients.mesh,
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Floating orb decorations */}
-      <motion.div
-        animate={{
-          x: [0, 30, 0],
-          y: [0, -20, 0],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        style={{
-          position: 'absolute',
-          top: '10%',
-          right: '10%',
-          width: 300,
-          height: 300,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(8, 145, 178, 0.15) 0%, transparent 70%)',
-          filter: 'blur(40px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-      <motion.div
-        animate={{
-          x: [0, -20, 0],
-          y: [0, 30, 0],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        style={{
-          position: 'absolute',
-          bottom: '20%',
-          left: '5%',
-          width: 250,
-          height: 250,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%)',
-          filter: 'blur(40px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
-      {/* Header with glassmorphism */}
+      {/* Header with liquid glass effect */}
       <Box
         component={motion.header}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         sx={{
           position: 'relative',
           zIndex: 10,
@@ -118,7 +59,7 @@ export default function ChatLayout() {
           sx={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: tokens.colors.background.glassDark,
+            backgroundColor: tokens.colors.background.glass,
             backdropFilter: tokens.blur.lg,
             WebkitBackdropFilter: tokens.blur.lg,
             borderBottom: `1px solid ${tokens.colors.border.subtle}`,
@@ -146,43 +87,27 @@ export default function ChatLayout() {
               gap: 2,
             }}
           >
-            <motion.div
-              whileHover={{ scale: 1.05, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
+            <Box
+              sx={{
+                width: 44,
+                height: 44,
+                borderRadius: 3,
+                background: tokens.colors.background.glassMedium,
+                border: `1px solid ${tokens.colors.border.subtle}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
             >
-              <Box
-                sx={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 3,
-                  background: tokens.colors.primary.gradientVibrant,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: tokens.shadows.glow,
-                  position: 'relative',
-                  overflow: 'hidden',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    inset: 0,
-                    background: tokens.gradients.shimmer,
-                    animation: 'shimmer 2s infinite',
-                  },
-                }}
-              >
-                <AutoAwesomeIcon sx={{ color: 'white', fontSize: 28, position: 'relative', zIndex: 1 }} />
-              </Box>
-            </motion.div>
+              <ChatBubbleOutlineIcon sx={{ color: tokens.colors.primary.light, fontSize: 22 }} />
+            </Box>
             <Box>
               <Typography
                 sx={{
-                  background: tokens.colors.primary.gradientLight,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  fontWeight: 700,
-                  fontSize: '1.25rem',
-                  letterSpacing: '-0.02em',
+                  color: tokens.colors.text.primary,
+                  fontWeight: 600,
+                  fontSize: '1.1rem',
+                  letterSpacing: '-0.01em',
                   lineHeight: 1.2,
                 }}
               >
@@ -191,58 +116,56 @@ export default function ChatLayout() {
               <Typography
                 sx={{
                   color: tokens.colors.text.muted,
-                  fontSize: '0.8rem',
-                  fontWeight: 500,
-                  letterSpacing: '0.02em',
+                  fontSize: '0.75rem',
+                  fontWeight: 400,
                 }}
               >
-                AI-Powered Support Assistant
+                AI-Powered Support
               </Typography>
             </Box>
           </Box>
 
           {/* Action buttons */}
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<AddIcon />}
-                onClick={newChat}
-                sx={{
-                  borderColor: tokens.colors.border.accent,
-                  color: tokens.colors.text.secondary,
-                  borderRadius: 2.5,
-                  px: 2.5,
-                  py: 1,
-                  fontWeight: 600,
-                  fontSize: '0.85rem',
-                  backdropFilter: tokens.blur.sm,
-                  backgroundColor: 'rgba(8, 145, 178, 0.05)',
-                  '&:hover': {
-                    borderColor: tokens.colors.primary.main,
-                    color: tokens.colors.primary.light,
-                    backgroundColor: 'rgba(8, 145, 178, 0.15)',
-                    boxShadow: tokens.shadows.glow,
-                  },
-                }}
-              >
-                New Chat
-              </Button>
-            </motion.div>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<AddIcon sx={{ fontSize: 18 }} />}
+              onClick={newChat}
+              sx={{
+                borderColor: tokens.colors.border.medium,
+                color: tokens.colors.text.secondary,
+                borderRadius: 2.5,
+                px: 2,
+                py: 0.75,
+                fontWeight: 500,
+                fontSize: '0.8rem',
+                backgroundColor: tokens.colors.background.glass,
+                '&:hover': {
+                  borderColor: tokens.colors.border.strong,
+                  backgroundColor: tokens.colors.background.glassMedium,
+                },
+              }}
+            >
+              New Chat
+            </Button>
             <Tooltip title="Clear chat" arrow>
-              <motion.span whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+              <span>
                 <IconButton
                   onClick={clearChat}
                   disabled={messages.length === 0}
+                  size="small"
                   sx={{
                     color: tokens.colors.text.muted,
-                    backgroundColor: 'rgba(239, 68, 68, 0.05)',
+                    backgroundColor: tokens.colors.background.glass,
                     border: `1px solid ${tokens.colors.border.subtle}`,
+                    borderRadius: 2,
+                    width: 36,
+                    height: 36,
                     '&:hover': {
                       color: '#ef4444',
-                      backgroundColor: 'rgba(239, 68, 68, 0.15)',
-                      borderColor: 'rgba(239, 68, 68, 0.3)',
+                      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                      borderColor: 'rgba(239, 68, 68, 0.2)',
                     },
                     '&.Mui-disabled': {
                       color: tokens.colors.text.muted,
@@ -250,9 +173,9 @@ export default function ChatLayout() {
                     },
                   }}
                 >
-                  <DeleteOutlineIcon />
+                  <DeleteOutlineIcon sx={{ fontSize: 18 }} />
                 </IconButton>
-              </motion.span>
+              </span>
             </Tooltip>
           </Box>
         </Box>
