@@ -40,7 +40,7 @@ DEFAULT_FULLTEXT_WEIGHT = 1.0
 # RAG Prompt Template
 RAG_PROMPT_TEMPLATE = """You are a helpful assistant that answers questions based on the provided context from Trakref's Zendesk Help online articles.
 
-Use ONLY the information from the context below to answer the question. If the context doesn't contain enough information to fully answer the question, acknowledge what you can answer and what information is missing.
+Use ONLY the information from the context below to answer the question. If the context doesn't contain enough information to fully answer the question, acknowledge what you can answer and what information is missing and return INSUFFICIENT_CONTEXT.
 
 Context:
 {context}
