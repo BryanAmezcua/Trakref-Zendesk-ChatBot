@@ -6,7 +6,7 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { message, sessionId } = body;
+    const { message, sessionId, agent_mode = false } = body;
 
     if (!message || typeof message !== 'string') {
       return NextResponse.json(
@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
         message,
         sessionId,
         top_k: 5,
+        agent_mode,
       }),
     });
 
@@ -39,10 +40,12 @@ export async function POST(request: NextRequest) {
     console.log('[Chat API]', {
       sessionId,
       query: message,
+      agent_mode,
       response: {
         sufficient_context: chatResponse.sufficient_context,
         citations_count: chatResponse.citations.length,
         confidence: chatResponse.confidence,
+        agent_action: chatResponse.agent_action,
       },
     });
 

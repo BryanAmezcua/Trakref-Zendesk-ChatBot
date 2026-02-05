@@ -1,10 +1,12 @@
 'use client';
 
-import { Box, InputBase, IconButton, CircularProgress } from '@mui/material';
+import { Box, InputBase, IconButton, CircularProgress, Switch, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import { useState, KeyboardEvent } from 'react';
 import { tokens } from '@/theme/theme';
+import { useChatStore } from '@/store/chatStore';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -14,6 +16,7 @@ interface ChatInputProps {
 export default function ChatInput({ onSend, disabled = false }: ChatInputProps) {
   const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const { agentMode, toggleAgentMode } = useChatStore();
 
   const handleSend = () => {
     const trimmed = input.trim();
@@ -62,6 +65,85 @@ export default function ChatInput({ onSend, disabled = false }: ChatInputProps) 
           mx: 'auto',
         }}
       >
+        {/* Agent mode toggle */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            mb: 1.5,
+            pl: 1,
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              px: 1,
+              py: 0.25,
+              borderRadius: '12px',
+              backgroundColor: agentMode ? 'rgba(139, 92, 246, 0.08)' : 'transparent',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <SmartToyOutlinedIcon
+              sx={{
+                fontSize: 16,
+                color: agentMode ? tokens.colors.accent.purple : tokens.colors.text.muted,
+                transition: 'color 0.2s ease',
+              }}
+            />
+            <Typography
+              sx={{
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                color: agentMode ? tokens.colors.accent.purple : tokens.colors.text.muted,
+                transition: 'color 0.2s ease',
+                userSelect: 'none',
+              }}
+            >
+              Agent
+            </Typography>
+            <Switch
+              checked={agentMode}
+              onChange={toggleAgentMode}
+              size="small"
+              sx={{
+                width: 36,
+                height: 20,
+                padding: 0,
+                ml: 0.5,
+                '& .MuiSwitch-switchBase': {
+                  padding: 0,
+                  margin: '2px',
+                  transitionDuration: '200ms',
+                  '&.Mui-checked': {
+                    transform: 'translateX(16px)',
+                    color: '#fff',
+                    '& + .MuiSwitch-track': {
+                      backgroundColor: tokens.colors.accent.purple,
+                      opacity: 1,
+                      border: 0,
+                    },
+                  },
+                },
+                '& .MuiSwitch-thumb': {
+                  boxSizing: 'border-box',
+                  width: 16,
+                  height: 16,
+                },
+                '& .MuiSwitch-track': {
+                  borderRadius: 10,
+                  backgroundColor: tokens.colors.border.medium,
+                  opacity: 1,
+                  transition: 'background-color 0.2s ease',
+                },
+              }}
+            />
+          </Box>
+        </Box>
+
         {/* Input container - pill shape like MUI chat */}
         <Box
           sx={{
@@ -73,17 +155,23 @@ export default function ChatInput({ onSend, disabled = false }: ChatInputProps) 
             borderRadius: '28px',
             backgroundColor: tokens.colors.background.surface,
             border: '1px solid',
-            borderColor: isFocused
-              ? tokens.colors.border.strong
-              : tokens.colors.border.subtle,
-            boxShadow: isFocused
-              ? `0 0 0 3px ${tokens.colors.primary.subtle}`
-              : 'none',
+            borderColor: agentMode
+              ? tokens.colors.accent.purple
+              : isFocused
+                ? tokens.colors.border.strong
+                : tokens.colors.border.subtle,
+            boxShadow: agentMode
+              ? `0 0 0 2px rgba(139, 92, 246, 0.15)`
+              : isFocused
+                ? `0 0 0 3px ${tokens.colors.primary.subtle}`
+                : 'none',
             transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
             '&:hover': {
-              borderColor: isFocused
-                ? tokens.colors.border.strong
-                : tokens.colors.border.medium,
+              borderColor: agentMode
+                ? tokens.colors.accent.purple
+                : isFocused
+                  ? tokens.colors.border.strong
+                  : tokens.colors.border.medium,
             },
           }}
         >
@@ -91,7 +179,7 @@ export default function ChatInput({ onSend, disabled = false }: ChatInputProps) 
             fullWidth
             multiline
             maxRows={4}
-            placeholder="Ask anything about Trakref..."
+            placeholder={agentMode ? "Ask the agent..." : "Ask anything about Trakref..."}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -188,11 +276,12 @@ export default function ChatInput({ onSend, disabled = false }: ChatInputProps) 
             component="span"
             sx={{
               fontSize: '0.7rem',
-              color: tokens.colors.text.muted,
+              color: agentMode ? tokens.colors.accent.purple : tokens.colors.text.muted,
               fontWeight: 400,
+              transition: 'color 0.2s ease',
             }}
           >
-            Powered by Trakref Help Center
+            {agentMode ? 'Agent mode: May ask clarifying questions' : 'Powered by Trakref Help Center'}
           </Box>
         </Box>
       </Box>

@@ -9,6 +9,7 @@ interface ChatStore {
   loadingStage: LoadingStage;
   error: string | null;
   sessionId: string;
+  agentMode: boolean;
 
   // Actions
   addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => string;
@@ -19,6 +20,7 @@ interface ChatStore {
   clearChat: () => void;
   newChat: () => void;
   sendMessage: (content: string) => Promise<void>;
+  toggleAgentMode: () => void;
 }
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
@@ -40,6 +42,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   loadingStage: 'idle',
   error: null,
   sessionId: generateId(),
+  agentMode: false,
 
   addMessage: (message) => {
     const newMessage: Message = {
@@ -77,6 +80,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingStage: 'idle',
     }),
 
+  toggleAgentMode: () => set((state) => ({ agentMode: !state.agentMode })),
+
   sendMessage: async (content: string) => {
     const { addMessage, updateMessage, setLoading, setLoadingStage, setError } = get();
 
@@ -111,6 +116,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         body: JSON.stringify({
           message: content,
           sessionId: get().sessionId,
+          agent_mode: get().agentMode,
         }),
       });
 

@@ -28,6 +28,7 @@ export interface ChatResponse {
   citations: Citation[];
   confidence: number;
   clarifying_question?: string;
+  agent_action?: 'answer' | 'clarify' | null;
 }
 
 export interface RetrievedDocument {

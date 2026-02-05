@@ -18,6 +18,7 @@ from pydantic import BaseModel
 
 from src.pipeline.hybrid.generation import generate_answer
 from src.retrieval.strategies.hybrid import retrieve_hybrid, retrieve_hybrid_with_metadata_filter
+from src.agent.supervisor import run_agent_pipeline
 
 # Load environment variables
 load_dotenv()
@@ -43,6 +44,7 @@ class ChatRequest(BaseModel):
     message: str
     sessionId: Optional[str] = None
     top_k: int = 5
+    agent_mode: bool = False
 
 
 class Citation(BaseModel):
@@ -58,6 +60,7 @@ class ChatResponse(BaseModel):
     citations: list[Citation]
     confidence: float
     clarifying_question: Optional[str] = None
+    agent_action: Optional[str] = None  # 'answer', 'clarify', or None for non-agent mode
 
 
 class RetrieveRequest(BaseModel):
@@ -93,20 +96,51 @@ async def chat(request: ChatRequest):
     """
     Chat endpoint that retrieves context and generates an answer.
     Uses hybrid RAG pipeline (vector + BM25) with MongoDB vector store.
+    Supports agent_mode for supervised RAG with clarifying questions.
     """
     try:
-        # Generate answer using the hybrid RAG pipeline
-        result = generate_answer(
-            question=request.message,
-            top_k=request.top_k,
-            verbose=True
-        )
+        if request.agent_mode:
+            # Use agent-supervised pipeline
+            result = run_agent_pipeline(
+                question=request.message,
+                top_k=request.top_k,
+                verbose=True
+            )
 
-        answer = result["answer"]
-        sources = result.get("sources", [])
+            agent_action = result.get("agent_action", "answer")
+            answer = result["answer"]
+            sources = result.get("sources", [])
+            clarifying_question = result.get("clarifying_question")
 
-        # Check if we have sufficient context
-        insufficient_context = "INSUFFICIENT_CONTEXT" in answer.upper()
+            # If agent is asking for clarification
+            if agent_action == "clarify":
+                return ChatResponse(
+                    answer=answer,
+                    sufficient_context=False,
+                    missing_info="Need more specific information",
+                    citations=[],
+                    confidence=0.3,
+                    clarifying_question=clarifying_question,
+                    agent_action=agent_action
+                )
+
+            # Agent provided an answer - process normally
+            insufficient_context = "INSUFFICIENT_CONTEXT" in answer.upper()
+
+        else:
+            # Use standard RAG pipeline
+            result = generate_answer(
+                question=request.message,
+                top_k=request.top_k,
+                verbose=True
+            )
+
+            answer = result["answer"]
+            sources = result.get("sources", [])
+            agent_action = None
+
+            # Check if we have sufficient context
+            insufficient_context = "INSUFFICIENT_CONTEXT" in answer.upper()
 
         # Build citations from sources
         citations = []
@@ -142,7 +176,8 @@ async def chat(request: ChatRequest):
             missing_info="More specific documentation needed" if insufficient_context else None,
             citations=citations,
             confidence=confidence,
-            clarifying_question=None
+            clarifying_question=None,
+            agent_action=agent_action
         )
 
     except Exception as e:
